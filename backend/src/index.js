@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
+const path = require('path');
 require('dotenv').config();
 
 const authRoutes = require('./routes/auth');
@@ -35,9 +36,12 @@ app.get('/health', (req, res) => {
 app.use('/auth', authRoutes);
 app.use('/quotes', quoteRoutes);
 
-// 404 핸들러
-app.use('*', (req, res) => {
-  res.status(404).json({ message: '요청한 리소스를 찾을 수 없습니다.' });
+// 정적 파일 서빙 (프론트엔드 빌드 파일)
+app.use(express.static(path.join(__dirname, '../../frontend/build')));
+
+// API가 아닌 모든 요청은 React 앱으로 라우팅
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../../frontend/build/index.html'));
 });
 
 // 에러 핸들러
