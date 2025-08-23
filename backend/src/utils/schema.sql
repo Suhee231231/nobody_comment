@@ -43,9 +43,16 @@ BEGIN
 END;
 $$ language 'plpgsql';
 
--- 트리거 생성 (IF NOT EXISTS 추가)
-CREATE TRIGGER IF NOT EXISTS update_users_updated_at BEFORE UPDATE ON users
-  FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-
-CREATE TRIGGER IF NOT EXISTS update_quotes_updated_at BEFORE UPDATE ON quotes
-  FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+-- 트리거 생성 (중복 방지)
+DO $$ 
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_trigger WHERE tgname = 'update_users_updated_at') THEN
+    CREATE TRIGGER update_users_updated_at BEFORE UPDATE ON users
+      FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+  END IF;
+  
+  IF NOT EXISTS (SELECT 1 FROM pg_trigger WHERE tgname = 'update_quotes_updated_at') THEN
+    CREATE TRIGGER update_quotes_updated_at BEFORE UPDATE ON quotes
+      FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+  END IF;
+END $$;
