@@ -1,0 +1,30 @@
+{
+  "short_name": "아무개명언",
+  "name": "아무개의 명언 - 가장 보통의 존재들이 쓰는 하루 한마디",
+  "description": "일상적인 사람들의 말을 마치 위인의 명언처럼 격상시키는 소셜 플랫폼",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "logo192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "logo512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#0ea5e9",
+  "background_color": "#ffffff",
+  "orientation": "portrait",
+  "categories": ["social", "lifestyle", "entertainment"],
+  "lang": "ko",
+  "dir": "ltr"
+}
