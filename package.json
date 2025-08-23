@@ -1,0 +1,26 @@
+{
+  "name": "nobody-comment",
+  "version": "1.0.0",
+  "description": "아무개의 명언 - 가장 보통의 존재들이 쓰는 하루 한마디",
+  "scripts": {
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:frontend": "cd frontend && npm start",
+    "dev:backend": "cd backend && npm run dev",
+    "build": "cd frontend && npm run build",
+    "start": "cd backend && npm start",
+    "install:all": "npm install && cd frontend && npm install && cd ../backend && npm install"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "keywords": [
+    "pwa",
+    "react",
+    "express",
+    "railway",
+    "social",
+    "daily-quotes"
+  ],
+  "author": "아무개",
+  "license": "MIT"
+}
