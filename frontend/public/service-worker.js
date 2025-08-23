@@ -1,8 +1,6 @@
 const CACHE_NAME = 'nobody-comment-v1';
 const urlsToCache = [
   '/',
-  '/static/js/bundle.js',
-  '/static/css/main.css',
   '/manifest.json',
   '/favicon.ico',
   '/logo192.png',
@@ -15,7 +13,11 @@ self.addEventListener('install', (event) => {
     caches.open(CACHE_NAME)
       .then((cache) => {
         console.log('캐시가 열렸습니다');
-        return cache.addAll(urlsToCache);
+        return cache.addAll(urlsToCache).catch((error) => {
+          console.log('일부 파일 캐싱 실패:', error);
+          // 실패해도 설치 계속 진행
+          return Promise.resolve();
+        });
       })
   );
 });
