@@ -6,6 +6,7 @@ require('dotenv').config();
 
 const authRoutes = require('./routes/auth');
 const quoteRoutes = require('./routes/quotes');
+const initializeDatabase = require('./utils/initDb');
 // const scheduler = require('./utils/scheduler');
 
 const app = express();
@@ -55,10 +56,17 @@ app.use((error, req, res, next) => {
 });
 
 // 서버 시작
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
   console.log(`🚀 서버가 포트 ${PORT}에서 실행 중입니다.`);
   console.log(`📱 환경: ${process.env.NODE_ENV || 'development'}`);
   console.log(`🌐 API URL: http://localhost:${PORT}`);
+  
+  // 데이터베이스 초기화
+  try {
+    await initializeDatabase();
+  } catch (error) {
+    console.error('❌ 데이터베이스 초기화 실패:', error);
+  }
   
   // 자정 리셋 스케줄러 시작
   // scheduler.scheduleDailyReset();
