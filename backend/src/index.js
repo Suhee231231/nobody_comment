@@ -17,7 +17,7 @@ const PORT = process.env.PORT || 3001;
 app.use(helmet());
 app.use(morgan('combined'));
 app.use(cors({
-  origin: process.env.CORS_ORIGIN || 'http://localhost:3000',
+  origin: process.env.CORS_ORIGIN || ['http://localhost:3000', 'https://nobody-comment.vercel.app'],
   credentials: true
 }));
 app.use(express.json({ limit: '10mb' }));
@@ -36,21 +36,10 @@ app.get('/health', (req, res) => {
 app.use('/auth', authRoutes);
 app.use('/quotes', quoteRoutes);
 
-// 정적 파일 서빙 (프론트엔드 빌드 파일이 있는 경우에만)
-const frontendBuildPath = path.join(__dirname, '../../frontend/build');
-if (require('fs').existsSync(frontendBuildPath)) {
-  app.use(express.static(frontendBuildPath));
-  
-  // API가 아닌 모든 요청은 React 앱으로 라우팅
-  app.get('*', (req, res) => {
-    res.sendFile(path.join(frontendBuildPath, 'index.html'));
-  });
-} else {
-  // 프론트엔드 빌드 파일이 없는 경우 404 응답
-  app.get('*', (req, res) => {
-    res.status(404).json({ message: '요청한 리소스를 찾을 수 없습니다.' });
-  });
-}
+// API 전용 서버 - 프론트엔드는 Vercel에서 서빙
+app.get('*', (req, res) => {
+  res.status(404).json({ message: '요청한 리소스를 찾을 수 없습니다.' });
+});
 
 // 에러 핸들러
 app.use((error, req, res, next) => {
@@ -80,13 +69,8 @@ app.listen(PORT, async () => {
     console.error('❌ 데이터베이스 초기화 실패:', error);
   }
   
-  // 프론트엔드 빌드 확인
-  const frontendPath = path.join(__dirname, '../../frontend/build');
-  if (require('fs').existsSync(frontendPath)) {
-    console.log('✅ 프론트엔드 빌드 파일이 존재합니다.');
-  } else {
-    console.log('⚠️ 프론트엔드 빌드 파일이 없습니다. API만 사용 가능합니다.');
-  }
+  console.log('🚀 API 전용 서버가 실행 중입니다.');
+  console.log('🌐 프론트엔드는 Vercel에서 서빙됩니다.');
   
   // 자정 리셋 스케줄러 시작
   // scheduler.scheduleDailyReset();
