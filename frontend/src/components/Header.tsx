@@ -54,7 +54,7 @@ const Header: React.FC<HeaderProps> = ({ user, onLogout }) => {
                 </Link>
                 <Link 
                   to="/register" 
-                  className="btn-primary"
+                  className="text-sm text-gray-600 hover:text-gray-900"
                 >
                   회원가입
                 </Link>
