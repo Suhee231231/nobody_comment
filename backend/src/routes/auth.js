@@ -46,11 +46,15 @@ router.post('/google/callback', async (req, res) => {
         return res.status(400).json({ message: '이미 가입된 이메일입니다. 일반 로그인을 이용해주세요.' });
       }
       
-      // 새 사용자 생성
-      user = await User.createWithGoogle({ 
-        username: userInfo.name, 
-        email: userInfo.email, 
-        googleId: userInfo.googleId 
+      // 새 사용자인 경우 404 에러 반환 (프론트엔드에서 약관 동의 모달 표시)
+      return res.status(404).json({ 
+        message: '새 사용자입니다. 약관 동의가 필요합니다.',
+        isNewUser: true,
+        userInfo: {
+          googleId: userInfo.googleId,
+          email: userInfo.email,
+          name: userInfo.name
+        }
       });
     }
     

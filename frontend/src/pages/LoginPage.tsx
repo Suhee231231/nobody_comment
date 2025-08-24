@@ -50,8 +50,8 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
         console.error('Google login check failed:', error);
         
         // 새 사용자인 경우 약관 동의 모달 표시
-        if (error.response?.status === 404 || error.response?.data?.message?.includes('새 사용자')) {
-          setShowTerms('service'); // 이용약관 모달 표시
+        if (error.response?.status === 404 && error.response?.data?.isNewUser) {
+          setShowTerms('signup'); // Google 회원가입 약관 동의 모달 표시
         } else {
           setError(error.response?.data?.message || '구글 로그인에 실패했습니다.');
         }
@@ -148,7 +148,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
 
   // 약관 모달 렌더링
   const renderTermsModal = () => {
-    if (!showTerms) return null;
+    if (showTerms !== 'service' && showTerms !== 'privacy') return null;
 
     const termsContent = {
       service: {
@@ -218,7 +218,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
 
   // Google 회원가입 약관 동의 모달
   const renderGoogleSignupModal = () => {
-    if (!showTerms) return null;
+    if (showTerms !== 'signup') return null;
 
     return (
       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
