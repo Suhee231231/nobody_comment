@@ -141,28 +141,28 @@ const QuoteCard: React.FC<QuoteCardProps> = ({
           <div className="flex space-x-3">
                          <button
                onClick={handleEditClick}
-               className="relative px-4 py-2 text-xs font-medium text-gray-800 bg-contain bg-center bg-no-repeat rounded-none shadow-md hover:shadow-lg transition-all duration-200 transform hover:-translate-y-0.5"
+               className="relative px-4 py-2 text-xs font-medium text-white bg-cover bg-center bg-no-repeat rounded-none shadow-md hover:shadow-lg transition-all duration-200 transform hover:-translate-y-0.5"
                style={{
                  backgroundImage: 'url(/edit-background.png)',
-                 backgroundSize: 'contain',
+                 backgroundSize: 'cover',
                  backgroundPosition: 'center',
                  backgroundRepeat: 'no-repeat',
                  boxShadow: '2px 2px 4px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.3)',
-                 textShadow: '0 1px 0 rgba(255,255,255,0.5)'
+                 textShadow: '0 1px 0 rgba(0,0,0,0.5)'
                }}
              >
                수정
              </button>
                          <button
                onClick={handleDeleteClick}
-               className="relative px-4 py-2 text-xs font-medium text-gray-800 bg-contain bg-center bg-no-repeat rounded-none shadow-md hover:shadow-lg transition-all duration-200 transform hover:-translate-y-0.5"
+               className="relative px-4 py-2 text-xs font-medium text-white bg-cover bg-center bg-no-repeat rounded-none shadow-md hover:shadow-lg transition-all duration-200 transform hover:-translate-y-0.5"
                style={{
                  backgroundImage: 'url(/delete-background.png)',
-                 backgroundSize: 'contain',
+                 backgroundSize: 'cover',
                  backgroundPosition: 'center',
                  backgroundRepeat: 'no-repeat',
                  boxShadow: '2px 2px 4px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.3)',
-                 textShadow: '0 1px 0 rgba(255,255,255,0.5)'
+                 textShadow: '0 1px 0 rgba(0,0,0,0.5)'
                }}
              >
                삭제
