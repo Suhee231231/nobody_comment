@@ -89,16 +89,28 @@ const QuoteCard: React.FC<QuoteCardProps> = ({
                   maxLength={100}
                   rows={3}
                 />
-                <div className="flex space-x-2 mt-2">
+                <div className="flex space-x-3 mt-3">
                   <button
                     onClick={handleSaveEdit}
-                    className="px-3 py-1 text-xs bg-blue-500 text-white rounded hover:bg-blue-600"
+                    className="relative px-4 py-2 text-xs font-medium text-gray-800 rounded-none shadow-md hover:shadow-lg transition-all duration-200 transform hover:-translate-y-0.5"
+                    style={{
+                      background: 'linear-gradient(135deg, #dbeafe 0%, #93c5fd 50%, #3b82f6 100%)',
+                      border: '2px solid #1d4ed8',
+                      boxShadow: '2px 2px 4px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.3)',
+                      textShadow: '0 1px 0 rgba(255,255,255,0.5)'
+                    }}
                   >
                     저장
                   </button>
                   <button
                     onClick={handleCancelEdit}
-                    className="px-3 py-1 text-xs bg-gray-500 text-white rounded hover:bg-gray-600"
+                    className="relative px-4 py-2 text-xs font-medium text-gray-800 rounded-none shadow-md hover:shadow-lg transition-all duration-200 transform hover:-translate-y-0.5"
+                    style={{
+                      background: 'linear-gradient(135deg, #f3f4f6 0%, #d1d5db 50%, #6b7280 100%)',
+                      border: '2px solid #4b5563',
+                      boxShadow: '2px 2px 4px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.3)',
+                      textShadow: '0 1px 0 rgba(255,255,255,0.5)'
+                    }}
                   >
                     취소
                   </button>
@@ -126,16 +138,28 @@ const QuoteCard: React.FC<QuoteCardProps> = ({
       <div className="flex justify-between items-center -mt-1">
         {/* 내 글인 경우 수정/삭제 버튼 */}
         {isMyQuote && !isEditing ? (
-          <div className="flex space-x-2">
+          <div className="flex space-x-3">
             <button
               onClick={handleEditClick}
-              className="px-3 py-1.5 text-xs bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-colors duration-200"
+              className="relative px-4 py-2 text-xs font-medium text-gray-800 bg-amber-50 border-2 border-amber-200 rounded-none shadow-md hover:shadow-lg transition-all duration-200 transform hover:-translate-y-0.5 before:absolute before:inset-0 before:bg-gradient-to-b before:from-amber-100 before:to-amber-50 before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-200"
+              style={{
+                background: 'linear-gradient(135deg, #fef3c7 0%, #fde68a 50%, #f59e0b 100%)',
+                border: '2px solid #d97706',
+                boxShadow: '2px 2px 4px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.3)',
+                textShadow: '0 1px 0 rgba(255,255,255,0.5)'
+              }}
             >
               수정
             </button>
             <button
               onClick={handleDeleteClick}
-              className="px-3 py-1.5 text-xs bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors duration-200"
+              className="relative px-4 py-2 text-xs font-medium text-gray-800 bg-red-50 border-2 border-red-200 rounded-none shadow-md hover:shadow-lg transition-all duration-200 transform hover:-translate-y-0.5 before:absolute before:inset-0 before:bg-gradient-to-b before:from-red-100 before:to-red-50 before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-200"
+              style={{
+                background: 'linear-gradient(135deg, #fee2e2 0%, #fecaca 50%, #ef4444 100%)',
+                border: '2px solid #dc2626',
+                boxShadow: '2px 2px 4px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.3)',
+                textShadow: '0 1px 0 rgba(255,255,255,0.5)'
+              }}
             >
               삭제
             </button>
@@ -148,11 +172,21 @@ const QuoteCard: React.FC<QuoteCardProps> = ({
         <div className="flex justify-end">
           <button
             onClick={handleLikeClick}
-            className={`flex items-center space-x-2 px-3 py-1.5 rounded-full transition-colors duration-200 ${
+            className={`relative flex items-center space-x-2 px-4 py-2 rounded-none shadow-md hover:shadow-lg transition-all duration-200 transform hover:-translate-y-0.5 ${
               quote.isLiked
-                ? 'bg-red-100 text-red-600 hover:bg-red-200'
-                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                ? 'text-red-700'
+                : 'text-gray-700'
             }`}
+            style={{
+              background: quote.isLiked 
+                ? 'linear-gradient(135deg, #fef2f2 0%, #fecaca 50%, #f87171 100%)'
+                : 'linear-gradient(135deg, #f9fafb 0%, #f3f4f6 50%, #d1d5db 100%)',
+              border: quote.isLiked 
+                ? '2px solid #dc2626'
+                : '2px solid #9ca3af',
+              boxShadow: '2px 2px 4px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.3)',
+              textShadow: '0 1px 0 rgba(255,255,255,0.5)'
+            }}
           >
             <svg
               className={`w-4 h-4 ${quote.isLiked ? 'fill-current' : 'stroke-current fill-none'}`}
