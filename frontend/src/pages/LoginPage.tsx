@@ -412,7 +412,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
         </div>
 
         {/* 구글 로그인 버튼 */}
-        <div>
+        <div className="w-full">
           <GoogleLogin
             onSuccess={handleGoogleLogin}
             onError={() => {
