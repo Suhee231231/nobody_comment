@@ -139,30 +139,34 @@ const QuoteCard: React.FC<QuoteCardProps> = ({
         {/* 내 글인 경우 수정/삭제 버튼 */}
         {isMyQuote && !isEditing ? (
           <div className="flex space-x-3">
-            <button
-              onClick={handleEditClick}
-              className="relative px-4 py-2 text-xs font-medium text-gray-800 bg-amber-50 border-2 border-amber-200 rounded-none shadow-md hover:shadow-lg transition-all duration-200 transform hover:-translate-y-0.5 before:absolute before:inset-0 before:bg-gradient-to-b before:from-amber-100 before:to-amber-50 before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-200"
-              style={{
-                background: 'linear-gradient(135deg, #fef3c7 0%, #fde68a 50%, #f59e0b 100%)',
-                border: '2px solid #d97706',
-                boxShadow: '2px 2px 4px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.3)',
-                textShadow: '0 1px 0 rgba(255,255,255,0.5)'
-              }}
-            >
-              수정
-            </button>
-            <button
-              onClick={handleDeleteClick}
-              className="relative px-4 py-2 text-xs font-medium text-gray-800 bg-red-50 border-2 border-red-200 rounded-none shadow-md hover:shadow-lg transition-all duration-200 transform hover:-translate-y-0.5 before:absolute before:inset-0 before:bg-gradient-to-b before:from-red-100 before:to-red-50 before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-200"
-              style={{
-                background: 'linear-gradient(135deg, #fee2e2 0%, #fecaca 50%, #ef4444 100%)',
-                border: '2px solid #dc2626',
-                boxShadow: '2px 2px 4px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.3)',
-                textShadow: '0 1px 0 rgba(255,255,255,0.5)'
-              }}
-            >
-              삭제
-            </button>
+                         <button
+               onClick={handleEditClick}
+               className="relative px-4 py-2 text-xs font-medium text-gray-800 bg-contain bg-center bg-no-repeat rounded-none shadow-md hover:shadow-lg transition-all duration-200 transform hover:-translate-y-0.5"
+               style={{
+                 backgroundImage: 'url(/edit-background.png)',
+                 backgroundSize: 'contain',
+                 backgroundPosition: 'center',
+                 backgroundRepeat: 'no-repeat',
+                 boxShadow: '2px 2px 4px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.3)',
+                 textShadow: '0 1px 0 rgba(255,255,255,0.5)'
+               }}
+             >
+               수정
+             </button>
+                         <button
+               onClick={handleDeleteClick}
+               className="relative px-4 py-2 text-xs font-medium text-gray-800 bg-contain bg-center bg-no-repeat rounded-none shadow-md hover:shadow-lg transition-all duration-200 transform hover:-translate-y-0.5"
+               style={{
+                 backgroundImage: 'url(/delete-background.png)',
+                 backgroundSize: 'contain',
+                 backgroundPosition: 'center',
+                 backgroundRepeat: 'no-repeat',
+                 boxShadow: '2px 2px 4px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.3)',
+                 textShadow: '0 1px 0 rgba(255,255,255,0.5)'
+               }}
+             >
+               삭제
+             </button>
           </div>
         ) : (
           <div></div>
