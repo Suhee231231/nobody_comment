@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { GoogleLogin } from '@react-oauth/google';
 import authService, { LoginData } from '../services/authService';
 
 interface LoginPageProps {
@@ -72,26 +73,35 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
 
 
 
-  const handleGoogleLogin = () => {
-    setLoading(true);
-    setError('');
-    setTermsAgreed(false);
-    setPrivacyAgreed(false);
-    
-    // 직접 Google OAuth URL로 리다이렉트
-    const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
-    const redirectUri = encodeURIComponent(window.location.origin);
-    const scope = encodeURIComponent('email profile');
-    
-    const googleAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?` +
-      `client_id=${clientId}&` +
-      `redirect_uri=${redirectUri}&` +
-      `response_type=code&` +
-      `scope=${scope}&` +
-      `access_type=offline&` +
-      `prompt=consent`;
-    
-    window.location.href = googleAuthUrl;
+  const handleGoogleLogin = async (credentialResponse: any) => {
+    try {
+      setLoading(true);
+      setError('');
+      
+      console.log('Google OAuth response:', credentialResponse);
+      
+      if (!credentialResponse.credential) {
+        setError('Google 로그인에 실패했습니다.');
+        return;
+      }
+      
+      // ID 토큰으로 로그인 시도
+      const result = await authService.googleLogin(credentialResponse.credential);
+      
+      onLogin();
+      navigate('/');
+    } catch (error: any) {
+      console.error('Google login failed:', error);
+      
+      // 새 사용자인 경우 약관 동의 모달 표시
+      if (error.response?.status === 404 && error.response?.data?.isNewUser) {
+        setShowTerms('signup'); // Google 회원가입 약관 동의 모달 표시
+      } else {
+        setError(error.response?.data?.message || '구글 로그인에 실패했습니다.');
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleTermsAgreement = async () => {
@@ -403,14 +413,19 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
 
         {/* 구글 로그인 버튼 */}
         <div>
-          <button
-            onClick={handleGoogleLogin}
-            disabled={loading}
-            className="w-full flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50"
-          >
-            <i className="fab fa-google text-red-500 mr-2"></i>
-            구글로 로그인
-          </button>
+          <GoogleLogin
+            onSuccess={handleGoogleLogin}
+            onError={() => {
+              console.error('Google Login Failed');
+              setError('Google 로그인에 실패했습니다.');
+            }}
+            theme="outline"
+            size="large"
+            text="continue_with"
+            shape="rectangular"
+            locale="ko"
+            useOneTap={false}
+          />
         </div>
 
         <div className="relative">

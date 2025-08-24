@@ -279,17 +279,17 @@ router.post('/google-signup', async (req, res) => {
 // 구글 로그인 (ID 토큰 방식)
 router.post('/google-login', async (req, res) => {
   try {
-    const { accessToken } = req.body;
+    const { idToken } = req.body;
     
-    console.log('Google login request received:', { hasAccessToken: !!accessToken });
+    console.log('Google login request received:', { hasIdToken: !!idToken });
     
-    if (!accessToken) {
-      return res.status(400).json({ message: 'Google 액세스 토큰이 필요합니다.' });
+    if (!idToken) {
+      return res.status(400).json({ message: 'Google ID 토큰이 필요합니다.' });
     }
     
-    // 액세스 토큰으로 사용자 정보 가져오기
+    // ID 토큰으로 사용자 정보 가져오기
     console.log('Getting user info from Google...');
-    const userInfo = await getUserInfoFromGoogle(accessToken);
+    const userInfo = await verifyGoogleToken(idToken);
     console.log('Google user info:', { 
       googleId: userInfo.googleId, 
       email: userInfo.email, 
