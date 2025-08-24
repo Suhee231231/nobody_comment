@@ -72,7 +72,7 @@ const QuoteCard: React.FC<QuoteCardProps> = ({
       </div>
       
       {/* 좋아요 버튼 - 카드 밖 하단 우측 정렬 */}
-      <div className="flex justify-end mt-1">
+      <div className="flex justify-end -mt-1">
         <button
           onClick={handleLikeClick}
           className={`flex items-center space-x-2 px-3 py-1.5 rounded-full transition-colors duration-200 ${
