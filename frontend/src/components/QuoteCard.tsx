@@ -49,7 +49,7 @@ const QuoteCard: React.FC<QuoteCardProps> = ({
         {/* 흰색 배경 오버레이 */}
         <div className="absolute inset-0 bg-white bg-opacity-90 rounded-lg"></div>
         
-        {/* 명언 내용 - 흰색 영역에 배치 */}
+        {/* 명언 내용과 작성자 - 픽셀 카드 안에 배치 */}
         <div className="absolute inset-0 flex flex-col justify-center px-8 py-8">
           <div className="flex-1 flex flex-col justify-center -mt-4">
             <p className="text-sm text-gray-800 leading-tight text-center font-medium pixel-text max-w-[80%] mx-auto">
@@ -57,53 +57,46 @@ const QuoteCard: React.FC<QuoteCardProps> = ({
             </p>
           </div>
           
-          {/* 하단 정보 영역 */}
-          <div className="flex items-center justify-between mt-4">
-            <div className="flex items-center space-x-1">
-              <div className="w-4 h-4 bg-gray-200 rounded-full flex items-center justify-center">
-                <span className="text-gray-700 font-medium text-xs">
-                  {quote.author.username.charAt(0)}
-                </span>
-              </div>
-              <div>
-                <p className="text-xs font-medium text-gray-900">
-                  {quote.author.username}
-                </p>
-                <p className="text-xs text-gray-500">
-                  {formatDate(quote.createdAt)}
-                </p>
-              </div>
-              {isMyQuote && (
-                <span className="text-xs bg-blue-100 text-blue-700 px-1 py-0.5 rounded">
-                  내 글
-                </span>
-              )}
-            </div>
-
-            {/* 좋아요 버튼 */}
-            <button
-              onClick={handleLikeClick}
-              className={`flex items-center space-x-1 px-2 py-1 rounded transition-colors duration-200 ${
-                quote.isLiked
-                  ? 'bg-red-100 text-red-600 hover:bg-red-200'
-                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-              }`}
-            >
-              <svg
-                className={`w-3 h-3 ${quote.isLiked ? 'fill-current' : 'stroke-current fill-none'}`}
-                viewBox="0 0 24 24"
-                strokeWidth="2"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                />
-              </svg>
-              <span className="text-xs font-medium">{quote.likes}</span>
-            </button>
+          {/* 작성자 정보 - 픽셀 카드 안 하단 */}
+          <div className="flex flex-col items-center mt-4">
+            <p className="text-xs text-gray-600 pixel-text">
+              - {quote.author.username}
+            </p>
+            <p className="text-xs text-gray-500 mt-1">
+              {formatDate(quote.createdAt)}
+            </p>
+            {isMyQuote && (
+              <span className="text-xs bg-blue-100 text-blue-700 px-1 py-0.5 rounded mt-1">
+                내 글
+              </span>
+            )}
           </div>
         </div>
+      </div>
+      
+      {/* 좋아요 버튼 - 픽셀 카드 밖 하단 */}
+      <div className="flex justify-center mt-2">
+        <button
+          onClick={handleLikeClick}
+          className={`flex items-center space-x-1 px-3 py-2 rounded-full transition-colors duration-200 ${
+            quote.isLiked
+              ? 'bg-red-100 text-red-600 hover:bg-red-200'
+              : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+          }`}
+        >
+          <svg
+            className={`w-4 h-4 ${quote.isLiked ? 'fill-current' : 'stroke-current fill-none'}`}
+            viewBox="0 0 24 24"
+            strokeWidth="2"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+            />
+          </svg>
+          <span className="text-sm font-medium">{quote.likes}</span>
+        </button>
       </div>
     </div>
   );
