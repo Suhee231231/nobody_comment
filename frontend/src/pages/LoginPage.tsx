@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { useGoogleLogin } from '@react-oauth/google';
 import authService, { LoginData } from '../services/authService';
 
 interface LoginPageProps {
@@ -71,22 +70,28 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
     setError('');
   };
 
-  const googleLogin = useGoogleLogin({
-    onError: () => {
-      setError('구글 로그인에 실패했습니다.');
-      setLoading(false);
-    },
-    flow: 'auth-code',
-    ux_mode: 'redirect',
-    redirect_uri: window.location.origin
-  });
+
 
   const handleGoogleLogin = () => {
     setLoading(true);
     setError('');
     setTermsAgreed(false);
     setPrivacyAgreed(false);
-    googleLogin();
+    
+    // 직접 Google OAuth URL로 리다이렉트
+    const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+    const redirectUri = encodeURIComponent(window.location.origin);
+    const scope = encodeURIComponent('email profile');
+    
+    const googleAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?` +
+      `client_id=${clientId}&` +
+      `redirect_uri=${redirectUri}&` +
+      `response_type=code&` +
+      `scope=${scope}&` +
+      `access_type=offline&` +
+      `prompt=consent`;
+    
+    window.location.href = googleAuthUrl;
   };
 
   const handleTermsAgreement = async () => {
