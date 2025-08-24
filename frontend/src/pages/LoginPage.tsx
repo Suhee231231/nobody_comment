@@ -78,7 +78,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
     const backendUrl = process.env.REACT_APP_API_URL || 'https://nobodycomment-production.up.railway.app';
     const redirectUri = encodeURIComponent(`${backendUrl}/auth/google/callback`);
     const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
-    const scope = encodeURIComponent('email profile');
+    const scope = encodeURIComponent('https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile openid');
     
     const googleAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?` +
       `client_id=${clientId}&` +
