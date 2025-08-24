@@ -421,10 +421,12 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
             }}
             theme="outline"
             size="large"
-            text="continue_with"
+            text="signin_with"
             shape="rectangular"
             locale="ko"
             useOneTap={false}
+            auto_select={false}
+            cancel_on_tap_outside={true}
           />
         </div>
 
