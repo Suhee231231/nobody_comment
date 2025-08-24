@@ -12,8 +12,9 @@ const HomePage: React.FC<HomePageProps> = ({ user }) => {
   const [quotes, setQuotes] = useState<Quote[]>([]);
   const [myQuote, setMyQuote] = useState<Quote | null>(null);
   const [loading, setLoading] = useState(true);
-  const [hasMore, setHasMore] = useState(true);
-  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalQuotes, setTotalQuotes] = useState(0);
 
   useEffect(() => {
     loadQuotes();
@@ -22,16 +23,14 @@ const HomePage: React.FC<HomePageProps> = ({ user }) => {
     }
   }, [user]);
 
-  const loadQuotes = async () => {
+  const loadQuotes = async (pageNum: number = 1) => {
     try {
       setLoading(true);
-      const response = await quoteService.getQuotes(page);
-      if (page === 1) {
-        setQuotes(response.quotes);
-      } else {
-        setQuotes(prev => [...prev, ...response.quotes]);
-      }
-      setHasMore(response.hasMore);
+      const response = await quoteService.getQuotes(pageNum, 10); // 한 페이지당 10개
+      setQuotes(response.quotes);
+      setTotalQuotes(response.total);
+      setTotalPages(Math.ceil(response.total / 10));
+      setCurrentPage(pageNum);
     } catch (error) {
       console.error('Failed to load quotes:', error);
     } finally {
@@ -114,10 +113,9 @@ const HomePage: React.FC<HomePageProps> = ({ user }) => {
     }
   };
 
-  const loadMore = () => {
-    if (!loading && hasMore) {
-      setPage(prev => prev + 1);
-      loadQuotes();
+  const handlePageChange = (pageNum: number) => {
+    if (!loading && pageNum !== currentPage && pageNum >= 1 && pageNum <= totalPages) {
+      loadQuotes(pageNum);
     }
   };
 
@@ -185,16 +183,51 @@ const HomePage: React.FC<HomePageProps> = ({ user }) => {
           </div>
         )}
 
-        {/* 더보기 버튼 */}
-        {hasMore && (
-          <div className="text-center mt-8">
+        {/* 페이지네이션 */}
+        {totalPages > 1 && (
+          <div className="flex justify-center items-center space-x-2 mt-8">
+            {/* 이전 페이지 버튼 */}
             <button
-              onClick={loadMore}
-              disabled={loading}
-              className="btn-secondary disabled:opacity-50"
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={loading || currentPage === 1}
+              className="px-3 py-2 text-sm bg-gray-100 text-gray-600 rounded hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {loading ? '로딩 중...' : '더 보기'}
+              이전
             </button>
+            
+            {/* 페이지 번호들 */}
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map(pageNum => (
+              <button
+                key={pageNum}
+                onClick={() => handlePageChange(pageNum)}
+                disabled={loading}
+                className={`px-3 py-2 text-sm rounded ${
+                  currentPage === pageNum
+                    ? 'bg-blue-500 text-white'
+                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                } disabled:opacity-50`}
+              >
+                {pageNum}
+              </button>
+            ))}
+            
+            {/* 다음 페이지 버튼 */}
+            <button
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={loading || currentPage === totalPages}
+              className="px-3 py-2 text-sm bg-gray-100 text-gray-600 rounded hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              다음
+            </button>
+          </div>
+        )}
+        
+        {/* 전체 명언 수 표시 */}
+        {totalQuotes > 0 && (
+          <div className="text-center mt-4">
+            <p className="text-sm text-gray-500">
+              총 {totalQuotes}개의 명언
+            </p>
           </div>
         )}
       </div>
