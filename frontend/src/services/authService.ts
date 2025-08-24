@@ -79,6 +79,18 @@ class AuthService {
     return response.data;
   }
 
+  async googleSignup(code: string, agreements: { termsAgreed: boolean; privacyAgreed: boolean }): Promise<AuthResponse> {
+    const response = await api.post<AuthResponse>('/auth/google-signup', { 
+      code, 
+      termsAgreed: agreements.termsAgreed,
+      privacyAgreed: agreements.privacyAgreed
+    });
+    const { user, token } = response.data;
+    localStorage.setItem('token', token);
+    localStorage.setItem('user', JSON.stringify(user));
+    return response.data;
+  }
+
   async forgotPassword(email: string): Promise<{ message: string }> {
     const response = await api.post<{ message: string }>('/auth/forgot-password', { email });
     return response.data;

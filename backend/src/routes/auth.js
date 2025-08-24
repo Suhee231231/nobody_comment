@@ -174,6 +174,86 @@ router.post('/verify-email', async (req, res) => {
   }
 });
 
+// 구글 회원가입 (약관 동의 포함)
+router.post('/google-signup', async (req, res) => {
+  try {
+    const { code, termsAgreed, privacyAgreed } = req.body;
+    
+    console.log('Google signup request received:', { 
+      hasCode: !!code, 
+      termsAgreed, 
+      privacyAgreed 
+    });
+    
+    if (!code) {
+      return res.status(400).json({ message: 'Google 인증 코드가 필요합니다.' });
+    }
+    
+    if (!termsAgreed || !privacyAgreed) {
+      return res.status(400).json({ message: '이용약관과 개인정보처리방침에 모두 동의해주세요.' });
+    }
+    
+    // 코드를 액세스 토큰으로 교환
+    const tokens = await exchangeCodeForToken(code);
+    
+    // ID 토큰에서 사용자 정보 추출
+    const userInfo = await verifyGoogleToken(tokens.id_token);
+    
+    // 기존 사용자 확인
+    let user = await User.findByGoogleId(userInfo.googleId);
+    
+    if (user) {
+      return res.status(400).json({ message: '이미 가입된 계정입니다.' });
+    }
+    
+    // 이메일로 기존 사용자 확인
+    user = await User.findByEmail(userInfo.email);
+    
+    if (user) {
+      return res.status(400).json({ message: '이미 가입된 이메일입니다. 일반 로그인을 이용해주세요.' });
+    }
+    
+    // 새 사용자 생성 (약관 동의 정보 포함)
+    console.log('Creating new user with Google and terms agreement...');
+    user = await User.createWithGoogleAndTerms({ 
+      username: userInfo.name, 
+      email: userInfo.email, 
+      googleId: userInfo.googleId,
+      termsAgreed,
+      privacyAgreed
+    });
+    console.log('New user created:', { id: user.id, username: user.username });
+    
+    const token = generateToken(user.id);
+    
+    res.json({
+      message: '구글 회원가입이 완료되었습니다.',
+      user: {
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        emailVerified: user.email_verified,
+        createdAt: user.created_at
+      },
+      token
+    });
+    
+  } catch (error) {
+    console.error('구글 회원가입 오류:', error);
+    console.error('Error details:', {
+      name: error.name,
+      message: error.message,
+      stack: error.stack
+    });
+    
+    if (error.message === 'Invalid Google token') {
+      return res.status(401).json({ message: '유효하지 않은 Google 토큰입니다.' });
+    }
+    
+    res.status(500).json({ message: '구글 회원가입 처리 중 오류가 발생했습니다.' });
+  }
+});
+
 // 구글 로그인 (ID 토큰 방식)
 router.post('/google-login', async (req, res) => {
   try {

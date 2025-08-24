@@ -25,6 +25,17 @@ class User {
     
     return result.rows[0];
   }
+
+  static async createWithGoogleAndTerms({ username, email, googleId, termsAgreed, privacyAgreed }) {
+    const result = await pool.query(
+      `INSERT INTO users (username, email, google_id, email_verified, password_hash, terms_agreed, privacy_agreed, terms_agreed_at, privacy_agreed_at) 
+       VALUES ($1, $2, $3, TRUE, '', $4, $5, NOW(), NOW()) 
+       RETURNING id, username, email, email_verified, created_at`,
+      [username, email, googleId, termsAgreed, privacyAgreed]
+    );
+    
+    return result.rows[0];
+  }
   
   static async findByEmail(email) {
     const result = await pool.query(
