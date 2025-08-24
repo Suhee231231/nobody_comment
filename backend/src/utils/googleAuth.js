@@ -4,7 +4,7 @@ const { OAuth2Client } = require('google-auth-library');
 const client = new OAuth2Client(
   process.env.GOOGLE_CLIENT_ID,
   process.env.GOOGLE_CLIENT_SECRET,
-  process.env.GOOGLE_REDIRECT_URI || 'https://nobody-comment.vercel.app'
+  process.env.GOOGLE_REDIRECT_URI || 'https://nobodycomment-production.up.railway.app/auth/google/callback'
 );
 
 // Google ID 토큰 검증
@@ -67,6 +67,13 @@ const getGoogleAuthUrl = () => {
     `scope=${encodeURIComponent(scope)}&` +
     `access_type=offline&` +
     `prompt=consent`;
+  
+  console.log('Generated Google OAuth URL:', {
+    clientId: clientId ? 'SET' : 'NOT SET',
+    redirectUri,
+    scope,
+    fullUrl: url
+  });
     
   return url;
 };
