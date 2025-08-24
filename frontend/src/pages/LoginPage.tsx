@@ -68,27 +68,21 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
 
 
 
-  const handleGoogleLogin = () => {
-    setLoading(true);
-    setError('');
-    setTermsAgreed(false);
-    setPrivacyAgreed(false);
-    
-    // 백엔드의 Google OAuth URL로 리다이렉트
-    const backendUrl = process.env.REACT_APP_API_URL || 'https://nobodycomment-production.up.railway.app';
-    const redirectUri = encodeURIComponent(`${backendUrl}/auth/google/callback`);
-    const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
-    const scope = encodeURIComponent('https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile openid');
-    
-    const googleAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?` +
-      `client_id=${clientId}&` +
-      `redirect_uri=${redirectUri}&` +
-      `response_type=code&` +
-      `scope=${scope}&` +
-      `access_type=offline&` +
-      `prompt=consent`;
-    
-    window.location.href = googleAuthUrl;
+  const handleGoogleLogin = async () => {
+    try {
+      setLoading(true);
+      setError('');
+      setTermsAgreed(false);
+      setPrivacyAgreed(false);
+      
+      // 백엔드에서 Google OAuth URL 생성
+      const authUrl = await authService.getGoogleAuthUrl();
+      window.location.href = authUrl;
+    } catch (error: any) {
+      console.error('Failed to get Google auth URL:', error);
+      setError('Google 로그인 URL 생성에 실패했습니다.');
+      setLoading(false);
+    }
   };
 
   const handleTermsAgreement = async () => {
