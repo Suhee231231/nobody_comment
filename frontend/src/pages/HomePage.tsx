@@ -138,14 +138,15 @@ const HomePage: React.FC<HomePageProps> = ({ user }) => {
               isMyQuote={true}
             />
           ) : (
-            <div className="card text-center py-8">
-              <p className="text-gray-600 mb-4">
-                오늘의 명언을 작성해보세요. 자정이 지나면 자동으로 삭제됩니다.
-              </p>
-              <Link to="/write" className="btn-primary">
-                작성하기
-              </Link>
-            </div>
+                         <div className="card text-center py-8">
+               <p className="text-gray-600 mb-4">
+                 오늘의 명언을 작성해보세요.<br />
+                 자정이 지나면 자동으로 삭제됩니다.
+               </p>
+               <Link to="/write" className="inline-block p-3 text-gray-800 hover:text-gray-900 transition-all duration-200 transform hover:-translate-y-0.5 hover:scale-110">
+                 <i className="fa-solid fa-pen-nib text-xl"></i>
+               </Link>
+             </div>
           )}
         </div>
       )}
@@ -157,16 +158,16 @@ const HomePage: React.FC<HomePageProps> = ({ user }) => {
         </h2>
         
         {quotes.length === 0 && !loading ? (
-          <div className="card text-center py-12">
-            <p className="text-gray-600 mb-4">
-              아직 작성된 명언이 없습니다
-            </p>
-            {user && (
-              <Link to="/write" className="btn-primary">
-                작성하기
-              </Link>
-            )}
-          </div>
+                     <div className="card text-center py-12">
+             <p className="text-gray-600 mb-4">
+               아직 작성된 명언이 없습니다
+             </p>
+             {user && (
+               <Link to="/write" className="inline-block p-3 text-gray-800 hover:text-gray-900 transition-all duration-200 transform hover:-translate-y-0.5 hover:scale-110">
+                 <i className="fa-solid fa-pen-nib text-xl"></i>
+               </Link>
+             )}
+           </div>
         ) : (
           <div className="space-y-6">
             {quotes.map(quote => (

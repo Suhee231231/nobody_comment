@@ -141,13 +141,13 @@ const QuoteCard: React.FC<QuoteCardProps> = ({
           <div className="flex space-x-3">
                          <button
                onClick={handleEditClick}
-               className="relative p-3 text-amber-600 hover:text-amber-700 transition-all duration-200 transform hover:-translate-y-0.5 hover:scale-110"
+               className="relative p-3 text-gray-800 hover:text-gray-900 transition-all duration-200 transform hover:-translate-y-0.5 hover:scale-110"
              >
                <i className="fas fa-edit text-xl"></i>
              </button>
                          <button
                onClick={handleDeleteClick}
-               className="relative p-3 text-red-600 hover:text-red-700 transition-all duration-200 transform hover:-translate-y-0.5 hover:scale-110"
+               className="relative p-3 text-gray-800 hover:text-gray-900 transition-all duration-200 transform hover:-translate-y-0.5 hover:scale-110"
              >
                <i className="fas fa-trash text-xl"></i>
              </button>
