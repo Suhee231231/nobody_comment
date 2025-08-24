@@ -33,8 +33,8 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
         setLoading(true);
         setError('');
         
-        // Google ID 토큰을 사용하여 로그인
-        const result = await authService.googleLogin(response.access_token);
+        // Google 인증 코드를 사용하여 로그인
+        const result = await authService.googleCallback(response.code);
         onLogin();
         navigate('/');
       } catch (error: any) {
@@ -48,7 +48,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
       setError('구글 로그인에 실패했습니다.');
       setLoading(false);
     },
-    flow: 'implicit'
+    flow: 'auth-code'
   });
 
   const handleGoogleLogin = () => {

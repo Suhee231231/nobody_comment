@@ -162,6 +162,18 @@ class User {
     
     return result.rows.length > 0;
   }
+
+  static async updateGoogleId(userId, googleId) {
+    const result = await pool.query(
+      `UPDATE users 
+       SET google_id = $1 
+       WHERE id = $2 
+       RETURNING id, username, email, email_verified`,
+      [googleId, userId]
+    );
+    
+    return result.rows[0] || null;
+  }
 }
 
 module.exports = User;

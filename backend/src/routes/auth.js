@@ -203,18 +203,24 @@ router.post('/google-login', async (req, res) => {
       
       if (user) {
         // 기존 사용자에게 Google ID 연결
-        // TODO: Google ID 업데이트 로직 구현
-        return res.status(400).json({ message: '이미 가입된 이메일입니다. 일반 로그인을 이용해주세요.' });
+        console.log('Existing user found by email, updating Google ID...');
+        try {
+          await User.updateGoogleId(user.id, userInfo.googleId);
+          console.log('Google ID updated successfully');
+        } catch (updateError) {
+          console.error('Failed to update Google ID:', updateError);
+          return res.status(400).json({ message: '이미 가입된 이메일입니다. 일반 로그인을 이용해주세요.' });
+        }
+      } else {
+        // 새 사용자 생성
+        console.log('Creating new user with Google...');
+        user = await User.createWithGoogle({ 
+          username: userInfo.name, 
+          email: userInfo.email, 
+          googleId: userInfo.googleId 
+        });
+        console.log('New user created:', { id: user.id, username: user.username });
       }
-      
-      // 새 사용자 생성
-      console.log('Creating new user with Google...');
-      user = await User.createWithGoogle({ 
-        username: userInfo.name, 
-        email: userInfo.email, 
-        googleId: userInfo.googleId 
-      });
-      console.log('New user created:', { id: user.id, username: user.username });
     } else {
       console.log('Existing Google user found:', { id: user.id, username: user.username });
     }
@@ -240,7 +246,13 @@ router.post('/google-login', async (req, res) => {
       message: error.message,
       stack: error.stack
     });
-    res.status(500).json({ message: '서버 오류가 발생했습니다.' });
+    
+    // 더 구체적인 에러 메시지
+    if (error.message === 'Invalid Google token') {
+      return res.status(401).json({ message: '유효하지 않은 Google 토큰입니다.' });
+    }
+    
+    res.status(500).json({ message: '구글 로그인 처리 중 오류가 발생했습니다.' });
   }
 });
 
