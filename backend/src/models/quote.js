@@ -79,6 +79,24 @@ class Quote {
     };
   }
   
+  static async update(id, { content }) {
+    const result = await pool.query(
+      'UPDATE quotes SET content = $1 WHERE id = $2 RETURNING *',
+      [content, id]
+    );
+    
+    return result.rows[0] || null;
+  }
+  
+  static async delete(id) {
+    const result = await pool.query(
+      'DELETE FROM quotes WHERE id = $1 RETURNING *',
+      [id]
+    );
+    
+    return result.rows[0] || null;
+  }
+  
   static async deleteById(id, authorId) {
     const result = await pool.query(
       'DELETE FROM quotes WHERE id = $1 AND author_id = $2 RETURNING *',

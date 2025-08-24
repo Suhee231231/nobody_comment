@@ -195,4 +195,100 @@ router.delete('/like', authenticateToken, async (req, res) => {
   }
 });
 
+// 명언 수정
+router.put('/:id', authenticateToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { content } = req.body;
+    const userId = req.user.id;
+    
+    // 입력 검증
+    if (!content || !content.trim()) {
+      return res.status(400).json({ message: '내용을 입력해주세요.' });
+    }
+    
+    if (content.length > 100) {
+      return res.status(400).json({ message: '100자 이내로 작성해주세요.' });
+    }
+    
+    // 명언 존재 확인 및 권한 확인
+    const quote = await Quote.findById(id);
+    if (!quote) {
+      return res.status(404).json({ message: '명언을 찾을 수 없습니다.' });
+    }
+    
+    if (quote.author_id !== userId) {
+      return res.status(403).json({ message: '수정 권한이 없습니다.' });
+    }
+    
+    // 오늘 작성한 글인지 확인
+    const today = new Date().toISOString().split('T')[0];
+    const quoteDate = new Date(quote.created_at).toISOString().split('T')[0];
+    
+    if (quoteDate !== today) {
+      return res.status(400).json({ message: '오늘 작성한 글만 수정할 수 있습니다.' });
+    }
+    
+    // 명언 수정
+    const updatedQuote = await Quote.update(id, { content: content.trim() });
+    
+    // 작성자 정보 조회
+    const author = await require('../models/user').findById(userId);
+    
+    res.json({
+      id: updatedQuote.id,
+      content: updatedQuote.content,
+      author: {
+        id: author.id,
+        username: author.username
+      },
+      likes: parseInt(updatedQuote.likes_count) || 0,
+      isLiked: updatedQuote.is_liked || false,
+      createdAt: updatedQuote.created_at
+    });
+    
+  } catch (error) {
+    console.error('명언 수정 오류:', error);
+    res.status(500).json({ message: '서버 오류가 발생했습니다.' });
+  }
+});
+
+// 명언 삭제
+router.delete('/:id', authenticateToken, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const userId = req.user.id;
+    
+    // 명언 존재 확인 및 권한 확인
+    const quote = await Quote.findById(id);
+    if (!quote) {
+      return res.status(404).json({ message: '명언을 찾을 수 없습니다.' });
+    }
+    
+    if (quote.author_id !== userId) {
+      return res.status(403).json({ message: '삭제 권한이 없습니다.' });
+    }
+    
+    // 오늘 작성한 글인지 확인
+    const today = new Date().toISOString().split('T')[0];
+    const quoteDate = new Date(quote.created_at).toISOString().split('T')[0];
+    
+    if (quoteDate !== today) {
+      return res.status(400).json({ message: '오늘 작성한 글만 삭제할 수 있습니다.' });
+    }
+    
+    // 좋아요 먼저 삭제
+    await Like.deleteByQuoteId(id);
+    
+    // 명언 삭제
+    await Quote.delete(id);
+    
+    res.json({ message: '명언이 삭제되었습니다.' });
+    
+  } catch (error) {
+    console.error('명언 삭제 오류:', error);
+    res.status(500).json({ message: '서버 오류가 발생했습니다.' });
+  }
+});
+
 module.exports = router;

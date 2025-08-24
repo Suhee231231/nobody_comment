@@ -58,6 +58,15 @@ class QuoteService {
       return false;
     }
   }
+
+  async updateQuote(quoteId: string, data: CreateQuoteData): Promise<Quote> {
+    const response = await api.put<Quote>(`/quotes/${quoteId}`, data);
+    return response.data;
+  }
+
+  async deleteQuote(quoteId: string): Promise<void> {
+    await api.delete(`/quotes/${quoteId}`);
+  }
 }
 
 export default new QuoteService();

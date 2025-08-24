@@ -53,6 +53,15 @@ class Like {
     return result.rows;
   }
   
+  static async deleteByQuoteId(quoteId) {
+    const result = await pool.query(
+      'DELETE FROM likes WHERE quote_id = $1 RETURNING *',
+      [quoteId]
+    );
+    
+    return result.rows;
+  }
+  
   static async deleteAllLikes() {
     await pool.query('DELETE FROM likes');
   }

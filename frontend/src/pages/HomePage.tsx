@@ -84,6 +84,36 @@ const HomePage: React.FC<HomePageProps> = ({ user }) => {
     }
   };
 
+  const handleUpdate = async (quoteId: string, content: string) => {
+    try {
+      const updatedQuote = await quoteService.updateQuote(quoteId, { content });
+      setQuotes(prev => 
+        prev.map(quote => 
+          quote.id === quoteId ? updatedQuote : quote
+        )
+      );
+      if (myQuote && myQuote.id === quoteId) {
+        setMyQuote(updatedQuote);
+      }
+    } catch (error) {
+      console.error('Failed to update quote:', error);
+      alert('글 수정에 실패했습니다.');
+    }
+  };
+
+  const handleDelete = async (quoteId: string) => {
+    try {
+      await quoteService.deleteQuote(quoteId);
+      setQuotes(prev => prev.filter(quote => quote.id !== quoteId));
+      if (myQuote && myQuote.id === quoteId) {
+        setMyQuote(null);
+      }
+    } catch (error) {
+      console.error('Failed to delete quote:', error);
+      alert('글 삭제에 실패했습니다.');
+    }
+  };
+
   const loadMore = () => {
     if (!loading && hasMore) {
       setPage(prev => prev + 1);
@@ -110,6 +140,8 @@ const HomePage: React.FC<HomePageProps> = ({ user }) => {
               quote={myQuote}
               onLike={handleLike}
               onUnlike={handleUnlike}
+              onUpdate={handleUpdate}
+              onDelete={handleDelete}
               isMyQuote={true}
             />
           ) : (
@@ -150,6 +182,8 @@ const HomePage: React.FC<HomePageProps> = ({ user }) => {
                 quote={quote}
                 onLike={handleLike}
                 onUnlike={handleUnlike}
+                onUpdate={handleUpdate}
+                onDelete={handleDelete}
                 isMyQuote={myQuote?.id === quote.id}
               />
             ))}
