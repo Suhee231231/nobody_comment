@@ -89,18 +89,18 @@ const QuoteCard: React.FC<QuoteCardProps> = ({
                   maxLength={100}
                   rows={3}
                 />
-                <div className="flex space-x-4 mt-3">
+                <div className="flex space-x-6 mt-2">
                   <button
                     onClick={handleSaveEdit}
-                    className="p-3 text-gray-800 hover:text-gray-900 transition-all duration-200 transform hover:-translate-y-0.5 hover:scale-110"
+                    className="p-4 text-gray-800 hover:text-gray-900 transition-all duration-200 transform hover:-translate-y-0.5 hover:scale-110"
                   >
-                    <i className="fas fa-save text-xl"></i>
+                    <i className="fas fa-save text-2xl"></i>
                   </button>
                   <button
                     onClick={handleCancelEdit}
-                    className="p-3 text-gray-800 hover:text-gray-900 transition-all duration-200 transform hover:-translate-y-0.5 hover:scale-110"
+                    className="p-4 text-gray-800 hover:text-gray-900 transition-all duration-200 transform hover:-translate-y-0.5 hover:scale-110"
                   >
-                    <i className="fas fa-arrow-left text-xl"></i>
+                    <i className="fas fa-undo text-2xl"></i>
                   </button>
                 </div>
               </div>
