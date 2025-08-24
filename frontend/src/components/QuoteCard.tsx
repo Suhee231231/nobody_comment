@@ -40,33 +40,27 @@ const QuoteCard: React.FC<QuoteCardProps> = ({
   };
 
   return (
-    <div className="relative w-full max-w-sm mx-auto mb-4">
-      {/* 픽셀 아트 카드 배경 */}
+    <div className="relative w-full max-w-md mx-auto mb-4">
+      {/* 빈티지 종이 카드 배경 */}
       <div 
-        className="relative w-full aspect-[4/3] bg-contain bg-center bg-no-repeat pixel-card"
-        style={{ backgroundImage: 'url(/pixel-card.png)' }}
+        className="relative w-full aspect-[3/2] bg-contain bg-center bg-no-repeat"
+        style={{ backgroundImage: 'url(/quote-card.png)' }}
       >
-        {/* 흰색 배경 오버레이 */}
-        <div className="absolute inset-0 bg-white bg-opacity-90 rounded-lg"></div>
-        
-        {/* 명언 내용과 작성자 - 픽셀 카드 안에 배치 */}
-        <div className="absolute inset-0 flex flex-col justify-center px-8 py-8">
-          <div className="flex-1 flex flex-col justify-center -mt-4">
-            <p className="text-sm text-gray-800 leading-tight text-center font-medium pixel-text max-w-[80%] mx-auto">
+        {/* 명언 내용과 작성자 - 카드 안에 배치 */}
+        <div className="absolute inset-0 flex flex-col justify-center px-12 py-10">
+          <div className="flex-1 flex flex-col justify-center">
+            <p className="text-base text-gray-800 leading-relaxed text-center font-medium max-w-[85%] mx-auto">
               "{quote.content}"
             </p>
           </div>
           
-          {/* 작성자 정보 - 픽셀 카드 안 하단 */}
-          <div className="flex flex-col items-center mt-4">
-            <p className="text-xs text-gray-600 pixel-text">
+          {/* 작성자 정보 - 카드 안 하단 */}
+          <div className="flex flex-col items-center mt-6">
+            <p className="text-sm text-gray-700 font-medium">
               - {quote.author.username}
             </p>
-            <p className="text-xs text-gray-500 mt-1">
-              {formatDate(quote.createdAt)}
-            </p>
             {isMyQuote && (
-              <span className="text-xs bg-blue-100 text-blue-700 px-1 py-0.5 rounded mt-1">
+              <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded mt-2">
                 내 글
               </span>
             )}
@@ -74,18 +68,18 @@ const QuoteCard: React.FC<QuoteCardProps> = ({
         </div>
       </div>
       
-      {/* 좋아요 버튼 - 픽셀 카드 밖 하단 */}
-      <div className="flex justify-center mt-2">
+      {/* 좋아요 버튼 - 카드 밖 하단 */}
+      <div className="flex justify-center mt-3">
         <button
           onClick={handleLikeClick}
-          className={`flex items-center space-x-1 px-3 py-2 rounded-full transition-colors duration-200 ${
+          className={`flex items-center space-x-2 px-4 py-2 rounded-full transition-colors duration-200 ${
             quote.isLiked
               ? 'bg-red-100 text-red-600 hover:bg-red-200'
               : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
           }`}
         >
           <svg
-            className={`w-4 h-4 ${quote.isLiked ? 'fill-current' : 'stroke-current fill-none'}`}
+            className={`w-5 h-5 ${quote.isLiked ? 'fill-current' : 'stroke-current fill-none'}`}
             viewBox="0 0 24 24"
             strokeWidth="2"
           >
