@@ -85,7 +85,7 @@ const QuoteCard: React.FC<QuoteCardProps> = ({
                 <textarea
                   value={editContent}
                   onChange={(e) => setEditContent(e.target.value)}
-                  className="w-full text-sm sm:text-base text-gray-800 text-center font-medium bg-transparent border-none resize-none focus:outline-none"
+                  className="w-full text-sm sm:text-base text-gray-800 text-center font-medium font-serif bg-transparent border-none resize-none focus:outline-none"
                   maxLength={100}
                   rows={3}
                 />
@@ -106,7 +106,7 @@ const QuoteCard: React.FC<QuoteCardProps> = ({
               </div>
             ) : (
               <div className="flex flex-col items-center space-y-2">
-                <p className="text-sm sm:text-base text-gray-800 leading-relaxed text-center font-medium">
+                <p className="text-sm sm:text-base text-gray-800 leading-relaxed text-center font-medium font-serif">
                   "{quote.content}"
                 </p>
                 

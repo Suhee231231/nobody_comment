@@ -7,6 +7,7 @@ module.exports = {
     extend: {
       fontFamily: {
         sans: ['Noto Sans KR', 'system-ui', 'sans-serif'],
+        serif: ['Noto Serif KR', 'Georgia', 'serif'],
       },
       colors: {
         primary: {
