@@ -26,10 +26,29 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
 
   useEffect(() => {
     const code = searchParams.get('code');
+    const token = searchParams.get('token');
+    const user = searchParams.get('user');
+    
     if (code && !loading && !isProcessingGoogleAuth) {
       setIsProcessingGoogleAuth(true);
       setGoogleAuthCode(code);
       handleGoogleCallback(code);
+    } else if (token && user && !loading) {
+      // 백엔드에서 리다이렉트로 전달된 토큰과 사용자 정보 처리
+      try {
+        const userData = JSON.parse(decodeURIComponent(user));
+        localStorage.setItem('token', token);
+        localStorage.setItem('user', JSON.stringify(userData));
+        
+        // URL에서 파라미터 제거
+        window.history.replaceState({}, document.title, window.location.pathname);
+        
+        onLogin();
+        navigate('/');
+      } catch (error) {
+        console.error('Failed to process login data:', error);
+        setError('로그인 처리 중 오류가 발생했습니다.');
+      }
     }
   }, [searchParams]);
 
