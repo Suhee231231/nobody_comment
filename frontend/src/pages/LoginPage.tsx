@@ -47,7 +47,8 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
     onError: () => {
       setError('구글 로그인에 실패했습니다.');
       setLoading(false);
-    }
+    },
+    flow: 'implicit'
   });
 
   const handleGoogleLogin = () => {

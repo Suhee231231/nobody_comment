@@ -179,12 +179,20 @@ router.post('/google-login', async (req, res) => {
   try {
     const { idToken } = req.body;
     
+    console.log('Google login request received:', { hasIdToken: !!idToken });
+    
     if (!idToken) {
       return res.status(400).json({ message: 'Google ID 토큰이 필요합니다.' });
     }
     
     // ID 토큰 검증
+    console.log('Verifying Google ID token...');
     const userInfo = await verifyGoogleToken(idToken);
+    console.log('Google user info:', { 
+      googleId: userInfo.googleId, 
+      email: userInfo.email, 
+      name: userInfo.name 
+    });
     
     // 기존 사용자 확인
     let user = await User.findByGoogleId(userInfo.googleId);
@@ -200,11 +208,15 @@ router.post('/google-login', async (req, res) => {
       }
       
       // 새 사용자 생성
+      console.log('Creating new user with Google...');
       user = await User.createWithGoogle({ 
         username: userInfo.name, 
         email: userInfo.email, 
         googleId: userInfo.googleId 
       });
+      console.log('New user created:', { id: user.id, username: user.username });
+    } else {
+      console.log('Existing Google user found:', { id: user.id, username: user.username });
     }
     
     const token = generateToken(user.id);
@@ -223,6 +235,11 @@ router.post('/google-login', async (req, res) => {
     
   } catch (error) {
     console.error('구글 로그인 오류:', error);
+    console.error('Error details:', {
+      name: error.name,
+      message: error.message,
+      stack: error.stack
+    });
     res.status(500).json({ message: '서버 오류가 발생했습니다.' });
   }
 });
