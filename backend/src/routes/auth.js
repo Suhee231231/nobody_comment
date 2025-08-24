@@ -18,10 +18,10 @@ router.get('/google/url', (req, res) => {
   }
 });
 
-// Google OAuth 콜백 처리 (GET 요청)
-router.get('/google/callback', async (req, res) => {
+// Google OAuth 콜백 처리 (POST 요청)
+router.post('/google/callback', async (req, res) => {
   try {
-    const { code } = req.query;
+    const { code } = req.body;
     
     if (!code) {
       return res.status(400).json({ message: '인증 코드가 필요합니다.' });
@@ -42,35 +42,40 @@ router.get('/google/callback', async (req, res) => {
       
       if (user) {
         // 기존 사용자에게 Google ID 연결
-        // TODO: Google ID 업데이트 로직 구현
-        return res.status(400).json({ message: '이미 가입된 이메일입니다. 일반 로그인을 이용해주세요.' });
-      }
-      
-      // 새 사용자인 경우 404 에러 반환 (프론트엔드에서 약관 동의 모달 표시)
-      return res.status(404).json({ 
-        message: '새 사용자입니다. 약관 동의가 필요합니다.',
-        isNewUser: true,
-        userInfo: {
-          googleId: userInfo.googleId,
-          email: userInfo.email,
-          name: userInfo.name
+        try {
+          await User.updateGoogleId(user.id, userInfo.googleId);
+        } catch (updateError) {
+          console.error('Failed to update Google ID:', updateError);
+          return res.status(400).json({ message: '이미 가입된 이메일입니다. 일반 로그인을 이용해주세요.' });
         }
-      });
+      } else {
+        // 새 사용자인 경우 404 에러 반환 (프론트엔드에서 약관 동의 모달 표시)
+        return res.status(404).json({ 
+          message: '새 사용자입니다. 약관 동의가 필요합니다.',
+          isNewUser: true,
+          userInfo: {
+            googleId: userInfo.googleId,
+            email: userInfo.email,
+            name: userInfo.name
+          }
+        });
+      }
     }
     
     const token = generateToken(user.id);
     
-    // 프론트엔드로 리다이렉트하면서 토큰과 사용자 정보를 URL 파라미터로 전달
-    const frontendUrl = process.env.FRONTEND_URL || 'https://nobody-comment.vercel.app';
-    const redirectUrl = `${frontendUrl}/login?token=${encodeURIComponent(token)}&user=${encodeURIComponent(JSON.stringify({
-      id: user.id,
-      username: user.username,
-      email: user.email,
-      emailVerified: user.email_verified,
-      createdAt: user.created_at
-    }))}`;
-    
-    res.redirect(redirectUrl);
+    // JSON 응답으로 토큰과 사용자 정보 반환
+    res.json({
+      message: '구글 로그인이 완료되었습니다.',
+      user: {
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        emailVerified: user.email_verified,
+        createdAt: user.created_at
+      },
+      token
+    });
     
   } catch (error) {
     console.error('Google OAuth callback failed:', error);
