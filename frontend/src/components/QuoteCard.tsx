@@ -44,7 +44,7 @@ const QuoteCard: React.FC<QuoteCardProps> = ({
       {/* 빈티지 종이 카드 배경 */}
       <div 
         className="relative w-full aspect-[3/2] bg-contain bg-center bg-no-repeat"
-        style={{ backgroundImage: 'url(/quote-card.png)' }}
+        style={{ backgroundImage: `url(${isMyQuote ? '/my-quote-card.png' : '/quote-card.png'})` }}
       >
         {/* 명언 내용과 작성자 - 카드 안에 배치 */}
         <div className="absolute inset-0">
@@ -60,11 +60,6 @@ const QuoteCard: React.FC<QuoteCardProps> = ({
                 <p className="text-xs sm:text-sm text-gray-700 font-medium">
                   - {quote.author.username}
                 </p>
-                {isMyQuote && (
-                  <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded mt-1">
-                    내 글
-                  </span>
-                )}
               </div>
             </div>
           </div>
