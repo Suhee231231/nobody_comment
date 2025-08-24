@@ -18,10 +18,10 @@ router.get('/google/url', (req, res) => {
   }
 });
 
-// Google OAuth 콜백 처리 (POST 요청)
-router.post('/google/callback', async (req, res) => {
+// Google OAuth 콜백 처리 (GET 요청)
+router.get('/google/callback', async (req, res) => {
   try {
-    const { code } = req.body;
+    const { code } = req.query;
     
     if (!code) {
       return res.status(400).json({ message: '인증 코드가 필요합니다.' });
@@ -64,18 +64,17 @@ router.post('/google/callback', async (req, res) => {
     
     const token = generateToken(user.id);
     
-    // JSON 응답으로 토큰과 사용자 정보 반환
-    res.json({
-      message: '구글 로그인이 완료되었습니다.',
-      user: {
-        id: user.id,
-        username: user.username,
-        email: user.email,
-        emailVerified: user.email_verified,
-        createdAt: user.created_at
-      },
-      token
-    });
+    // 프론트엔드로 리다이렉트하면서 토큰과 사용자 정보를 URL 파라미터로 전달
+    const frontendUrl = process.env.FRONTEND_URL || 'https://nobody-comment.vercel.app';
+    const redirectUrl = `${frontendUrl}/login?token=${encodeURIComponent(token)}&user=${encodeURIComponent(JSON.stringify({
+      id: user.id,
+      username: user.username,
+      email: user.email,
+      emailVerified: user.email_verified,
+      createdAt: user.created_at
+    }))}`;
+    
+    res.redirect(redirectUrl);
     
   } catch (error) {
     console.error('Google OAuth callback failed:', error);
