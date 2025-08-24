@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 import Header from './components/Header';
 import HomePage from './pages/HomePage';
 import WritePage from './pages/WritePage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
+import VerifyEmailPage from './pages/VerifyEmailPage';
 import authService, { User } from './services/authService';
 import './App.css';
 
@@ -51,34 +53,37 @@ function App() {
   }
 
   return (
-    <Router>
-      <div className="App min-h-screen bg-gray-50">
-        <Header user={user} onLogout={handleLogout} />
-        <main>
-          <Routes>
-            <Route path="/" element={<HomePage user={user} />} />
-            <Route 
-              path="/write" 
-              element={
-                user ? <WritePage /> : <Navigate to="/login" replace />
-              } 
-            />
-            <Route 
-              path="/login" 
-              element={
-                user ? <Navigate to="/" replace /> : <LoginPage onLogin={handleLogin} />
-              } 
-            />
-            <Route 
-              path="/register" 
-              element={
-                user ? <Navigate to="/" replace /> : <RegisterPage onLogin={handleLogin} />
-              } 
-            />
-          </Routes>
-        </main>
-      </div>
-    </Router>
+    <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID || ''}>
+      <Router>
+        <div className="App min-h-screen bg-gray-50">
+          <Header user={user} onLogout={handleLogout} />
+          <main>
+            <Routes>
+              <Route path="/" element={<HomePage user={user} />} />
+              <Route 
+                path="/write" 
+                element={
+                  user ? <WritePage /> : <Navigate to="/login" replace />
+                } 
+              />
+              <Route 
+                path="/login" 
+                element={
+                  user ? <Navigate to="/" replace /> : <LoginPage onLogin={handleLogin} />
+                } 
+              />
+              <Route 
+                path="/register" 
+                element={
+                  user ? <Navigate to="/" replace /> : <RegisterPage onLogin={handleLogin} />
+                } 
+              />
+              <Route path="/verify-email" element={<VerifyEmailPage />} />
+            </Routes>
+          </main>
+        </div>
+      </Router>
+    </GoogleOAuthProvider>
   );
 }
 

@@ -7,7 +7,7 @@ require('dotenv').config();
 
 const authRoutes = require('./routes/auth');
 const quoteRoutes = require('./routes/quotes');
-const initializeDatabase = require('./utils/initDb');
+const { initializeDatabase, runMigration } = require('./utils/initDb');
 // const scheduler = require('./utils/scheduler');
 
 const app = express();
@@ -62,11 +62,19 @@ app.listen(PORT, async () => {
   console.log(`📱 환경: ${process.env.NODE_ENV || 'development'}`);
   console.log(`🌐 API URL: http://localhost:${PORT}`);
   
-  // 데이터베이스 초기화
+  // 데이터베이스 초기화 및 마이그레이션
   try {
     await initializeDatabase();
+    console.log('✅ 데이터베이스 초기화 및 마이그레이션 완료');
   } catch (error) {
     console.error('❌ 데이터베이스 초기화 실패:', error);
+    // 마이그레이션만 시도
+    try {
+      await runMigration();
+      console.log('✅ 데이터베이스 마이그레이션 완료');
+    } catch (migrationError) {
+      console.error('❌ 마이그레이션 실패:', migrationError);
+    }
   }
   
   console.log('🚀 API 전용 서버가 실행 중입니다.');
