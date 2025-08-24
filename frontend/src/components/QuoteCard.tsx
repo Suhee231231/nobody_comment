@@ -89,30 +89,18 @@ const QuoteCard: React.FC<QuoteCardProps> = ({
                   maxLength={100}
                   rows={3}
                 />
-                <div className="flex space-x-3 mt-3">
+                <div className="flex space-x-4 mt-3">
                   <button
                     onClick={handleSaveEdit}
-                    className="relative px-4 py-2 text-xs font-medium text-gray-800 rounded-none shadow-md hover:shadow-lg transition-all duration-200 transform hover:-translate-y-0.5"
-                    style={{
-                      background: 'linear-gradient(135deg, #dbeafe 0%, #93c5fd 50%, #3b82f6 100%)',
-                      border: '2px solid #1d4ed8',
-                      boxShadow: '2px 2px 4px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.3)',
-                      textShadow: '0 1px 0 rgba(255,255,255,0.5)'
-                    }}
+                    className="p-3 text-gray-800 hover:text-gray-900 transition-all duration-200 transform hover:-translate-y-0.5 hover:scale-110"
                   >
-                    저장
+                    <i className="fas fa-save text-xl"></i>
                   </button>
                   <button
                     onClick={handleCancelEdit}
-                    className="relative px-4 py-2 text-xs font-medium text-gray-800 rounded-none shadow-md hover:shadow-lg transition-all duration-200 transform hover:-translate-y-0.5"
-                    style={{
-                      background: 'linear-gradient(135deg, #f3f4f6 0%, #d1d5db 50%, #6b7280 100%)',
-                      border: '2px solid #4b5563',
-                      boxShadow: '2px 2px 4px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.3)',
-                      textShadow: '0 1px 0 rgba(255,255,255,0.5)'
-                    }}
+                    className="p-3 text-gray-800 hover:text-gray-900 transition-all duration-200 transform hover:-translate-y-0.5 hover:scale-110"
                   >
-                    취소
+                    <i className="fas fa-arrow-left text-xl"></i>
                   </button>
                 </div>
               </div>
