@@ -3,7 +3,7 @@ const User = require('../models/user');
 const { generateToken } = require('../utils/jwt');
 const { authenticateToken } = require('../middleware/auth');
 const { generateVerificationToken, sendVerificationEmail, sendPasswordResetEmail } = require('../utils/emailService');
-const { verifyGoogleToken, getGoogleAuthUrl, exchangeCodeForToken } = require('../utils/googleAuth');
+const { verifyGoogleToken, getUserInfoFromGoogle, getGoogleAuthUrl, exchangeCodeForToken } = require('../utils/googleAuth');
 
 const router = express.Router();
 
@@ -275,17 +275,17 @@ router.post('/google-signup', async (req, res) => {
 // 구글 로그인 (ID 토큰 방식)
 router.post('/google-login', async (req, res) => {
   try {
-    const { idToken } = req.body;
+    const { accessToken } = req.body;
     
-    console.log('Google login request received:', { hasIdToken: !!idToken });
+    console.log('Google login request received:', { hasAccessToken: !!accessToken });
     
-    if (!idToken) {
-      return res.status(400).json({ message: 'Google ID 토큰이 필요합니다.' });
+    if (!accessToken) {
+      return res.status(400).json({ message: 'Google 액세스 토큰이 필요합니다.' });
     }
     
-    // ID 토큰 검증
-    console.log('Verifying Google ID token...');
-    const userInfo = await verifyGoogleToken(idToken);
+    // 액세스 토큰으로 사용자 정보 가져오기
+    console.log('Getting user info from Google...');
+    const userInfo = await getUserInfoFromGoogle(accessToken);
     console.log('Google user info:', { 
       googleId: userInfo.googleId, 
       email: userInfo.email, 

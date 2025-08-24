@@ -30,6 +30,30 @@ const verifyGoogleToken = async (idToken) => {
   }
 };
 
+// Google 액세스 토큰으로 사용자 정보 가져오기
+const getUserInfoFromGoogle = async (accessToken) => {
+  try {
+    const response = await fetch(`https://www.googleapis.com/oauth2/v2/userinfo?access_token=${accessToken}`);
+    
+    if (!response.ok) {
+      throw new Error('Failed to get user info from Google');
+    }
+    
+    const userInfo = await response.json();
+    
+    return {
+      googleId: userInfo.id,
+      email: userInfo.email,
+      name: userInfo.name,
+      picture: userInfo.picture,
+      emailVerified: userInfo.verified_email
+    };
+  } catch (error) {
+    console.error('Failed to get user info from Google:', error);
+    throw new Error('Invalid Google token');
+  }
+};
+
 // Google OAuth URL 생성
 const getGoogleAuthUrl = () => {
   const clientId = process.env.GOOGLE_CLIENT_ID;
@@ -91,6 +115,7 @@ const exchangeCodeForToken = async (code) => {
 
 module.exports = {
   verifyGoogleToken,
+  getUserInfoFromGoogle,
   getGoogleAuthUrl,
   exchangeCodeForToken
 };
