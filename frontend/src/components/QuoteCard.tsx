@@ -71,18 +71,18 @@ const QuoteCard: React.FC<QuoteCardProps> = ({
         </div>
       </div>
       
-      {/* 좋아요 버튼 - 카드 밖 하단 */}
-      <div className="flex justify-center mt-3">
+      {/* 좋아요 버튼 - 카드 밖 하단 우측 정렬 */}
+      <div className="flex justify-end mt-1">
         <button
           onClick={handleLikeClick}
-          className={`flex items-center space-x-2 px-4 py-2 rounded-full transition-colors duration-200 ${
+          className={`flex items-center space-x-2 px-3 py-1.5 rounded-full transition-colors duration-200 ${
             quote.isLiked
               ? 'bg-red-100 text-red-600 hover:bg-red-200'
               : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
           }`}
         >
           <svg
-            className={`w-5 h-5 ${quote.isLiked ? 'fill-current' : 'stroke-current fill-none'}`}
+            className={`w-4 h-4 ${quote.isLiked ? 'fill-current' : 'stroke-current fill-none'}`}
             viewBox="0 0 24 24"
             strokeWidth="2"
           >
