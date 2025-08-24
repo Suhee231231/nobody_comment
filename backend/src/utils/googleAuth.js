@@ -109,6 +109,10 @@ const exchangeCodeForToken = async (code) => {
       throw new Error('Google OAuth client secret is not configured properly');
     }
     
+    if (error.response?.data?.error === 'invalid_grant') {
+      throw new Error('Google OAuth code has expired or already been used');
+    }
+    
     throw new Error('Failed to exchange code for token');
   }
 };

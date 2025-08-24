@@ -268,6 +268,10 @@ router.post('/google-signup', async (req, res) => {
       return res.status(401).json({ message: '유효하지 않은 Google 토큰입니다.' });
     }
     
+    if (error.message === 'Google OAuth code has expired or already been used') {
+      return res.status(400).json({ message: 'Google 인증 코드가 만료되었거나 이미 사용되었습니다. 다시 시도해주세요.' });
+    }
+    
     res.status(500).json({ message: '구글 회원가입 처리 중 오류가 발생했습니다.' });
   }
 });
