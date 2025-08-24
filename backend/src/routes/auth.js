@@ -74,6 +74,20 @@ router.post('/google/callback', async (req, res) => {
     
   } catch (error) {
     console.error('Google OAuth callback failed:', error);
+    
+    // 더 구체적인 에러 메시지
+    if (error.message === 'Google OAuth configuration is incomplete') {
+      return res.status(500).json({ message: 'Google OAuth 설정이 완료되지 않았습니다.' });
+    }
+    
+    if (error.message === 'Google OAuth client secret is not configured properly') {
+      return res.status(500).json({ message: 'Google OAuth 클라이언트 시크릿이 올바르게 설정되지 않았습니다.' });
+    }
+    
+    if (error.message === 'Invalid Google token') {
+      return res.status(401).json({ message: '유효하지 않은 Google 토큰입니다.' });
+    }
+    
     res.status(500).json({ message: '구글 로그인에 실패했습니다.' });
   }
 });
