@@ -75,7 +75,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
     setPrivacyAgreed(false);
     
     // 백엔드의 Google OAuth URL로 리다이렉트
-    const backendUrl = process.env.REACT_APP_API_URL || 'https://nobody-comment-backend-production.up.railway.app';
+    const backendUrl = process.env.REACT_APP_API_URL || 'https://nobodycomment-production.up.railway.app';
     const redirectUri = encodeURIComponent(`${backendUrl}/auth/google/callback`);
     const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
     const scope = encodeURIComponent('email profile');
