@@ -108,15 +108,17 @@ const WritePage: React.FC = () => {
               className="input-field h-32 resize-none"
               maxLength={100}
             />
-            <div className="flex justify-between items-center mt-2">
+            <div className="mt-2 space-y-2">
               <p className="text-sm text-gray-500">
-                하루에 한 번만 작성할 수 있습니다
+                하루에 하나의 글만 게시할 수 있으며, 수정과 삭제가 자유롭습니다. 자정이 지나면 글은 자동 삭제됩니다.
               </p>
-              <span className={`text-sm ${
-                remainingChars < 10 ? 'text-red-500' : 'text-gray-500'
-              }`}>
-                {remainingChars}자 남음
-              </span>
+              <div className="flex justify-end">
+                <span className={`text-sm ${
+                  remainingChars < 10 ? 'text-red-500' : 'text-gray-500'
+                }`}>
+                  {remainingChars}자 남음
+                </span>
+              </div>
             </div>
           </div>
 
