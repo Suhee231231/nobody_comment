@@ -25,6 +25,25 @@ function App() {
         const currentUser = await authService.getCurrentUser();
         setUser(currentUser);
       }
+      
+      // URL에서 토큰 파라미터 확인 (Google OAuth 콜백 처리)
+      const urlParams = new URLSearchParams(window.location.search);
+      const token = urlParams.get('token');
+      const userParam = urlParams.get('user');
+      
+      if (token && userParam) {
+        try {
+          const userData = JSON.parse(decodeURIComponent(userParam));
+          localStorage.setItem('token', token);
+          localStorage.setItem('user', JSON.stringify(userData));
+          setUser(userData);
+          
+          // URL에서 파라미터 제거
+          window.history.replaceState({}, document.title, window.location.pathname);
+        } catch (error) {
+          console.error('Failed to process URL auth data:', error);
+        }
+      }
     } catch (error) {
       console.error('Auth check failed:', error);
     } finally {

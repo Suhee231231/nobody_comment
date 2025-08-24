@@ -26,29 +26,11 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
 
   useEffect(() => {
     const code = searchParams.get('code');
-    const token = searchParams.get('token');
-    const user = searchParams.get('user');
     
     if (code && !loading && !isProcessingGoogleAuth) {
       setIsProcessingGoogleAuth(true);
       setGoogleAuthCode(code);
       handleGoogleCallback(code);
-    } else if (token && user && !loading) {
-      // 백엔드에서 리다이렉트로 전달된 토큰과 사용자 정보 처리
-      try {
-        const userData = JSON.parse(decodeURIComponent(user));
-        localStorage.setItem('token', token);
-        localStorage.setItem('user', JSON.stringify(userData));
-        
-        // URL에서 파라미터 제거
-        window.history.replaceState({}, document.title, window.location.pathname);
-        
-        onLogin();
-        navigate('/');
-      } catch (error) {
-        console.error('Failed to process login data:', error);
-        setError('로그인 처리 중 오류가 발생했습니다.');
-      }
     }
   }, [searchParams]);
 
@@ -60,10 +42,10 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
       // URL에서 인증 코드 제거 (보안 강화)
       window.history.replaceState({}, document.title, window.location.pathname);
       
-      // 먼저 기존 사용자인지 확인
+      // Google OAuth 코드로 백엔드에 요청
       const result = await authService.googleCallback(code);
       
-      // 기존 사용자인 경우 바로 로그인
+      // 로그인 성공
       onLogin();
       navigate('/');
     } catch (error: any) {
