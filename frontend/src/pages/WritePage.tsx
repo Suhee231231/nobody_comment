@@ -133,16 +133,9 @@ const WritePage: React.FC = () => {
             <button
               type="submit"
               disabled={loading || !content.trim()}
-              className="btn-primary flex-1 disabled:opacity-50 flex items-center justify-center space-x-2"
+              className="btn-primary flex-1 disabled:opacity-50"
             >
-              {loading ? (
-                '작성 중...'
-              ) : (
-                <>
-                  <i className="fa-solid fa-pen-nib text-2xl"></i>
-                  <span>명언 작성하기</span>
-                </>
-              )}
+              {loading ? '작성 중...' : '작성하기'}
             </button>
           </div>
         </form>

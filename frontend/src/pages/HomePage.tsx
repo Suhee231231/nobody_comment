@@ -144,7 +144,7 @@ const HomePage: React.FC<HomePageProps> = ({ user }) => {
                  자정이 지나면 자동으로 삭제됩니다.
                </p>
                <Link to="/write" className="inline-block p-3 text-gray-800 hover:text-gray-900 transition-all duration-200 transform hover:-translate-y-0.5 hover:scale-110">
-                 <i className="fa-solid fa-pen-nib text-xl"></i>
+                 <i className="fa-solid fa-pen-nib text-3xl"></i>
                </Link>
              </div>
           )}
@@ -164,7 +164,7 @@ const HomePage: React.FC<HomePageProps> = ({ user }) => {
              </p>
              {user && (
                <Link to="/write" className="inline-block p-3 text-gray-800 hover:text-gray-900 transition-all duration-200 transform hover:-translate-y-0.5 hover:scale-110">
-                 <i className="fa-solid fa-pen-nib text-xl"></i>
+                 <i className="fa-solid fa-pen-nib text-3xl"></i>
                </Link>
              )}
            </div>
