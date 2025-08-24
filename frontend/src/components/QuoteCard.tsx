@@ -141,63 +141,31 @@ const QuoteCard: React.FC<QuoteCardProps> = ({
           <div className="flex space-x-3">
                          <button
                onClick={handleEditClick}
-               className="relative px-4 py-2 text-xs font-medium text-gray-800 bg-transparent rounded-md transition-all duration-200 transform hover:-translate-y-0.5"
-               style={{
-                 border: '2px ridge #d97706',
-                 boxShadow: '1px 1px 3px rgba(0,0,0,0.1)'
-               }}
+               className="relative p-3 text-amber-600 hover:text-amber-700 transition-all duration-200 transform hover:-translate-y-0.5 hover:scale-110"
              >
-               수정
+               <i className="fas fa-edit text-xl"></i>
              </button>
                          <button
                onClick={handleDeleteClick}
-               className="relative px-4 py-2 text-xs font-medium text-gray-800 bg-transparent rounded-md transition-all duration-200 transform hover:-translate-y-0.5"
-               style={{
-                 border: '2px ridge #dc2626',
-                 boxShadow: '1px 1px 3px rgba(0,0,0,0.1)'
-               }}
+               className="relative p-3 text-red-600 hover:text-red-700 transition-all duration-200 transform hover:-translate-y-0.5 hover:scale-110"
              >
-               삭제
+               <i className="fas fa-trash text-xl"></i>
              </button>
           </div>
         ) : (
           <div></div>
         )}
         
-        {/* 좋아요 버튼 - 우측 정렬 */}
-        <div className="flex justify-end">
-          <button
-            onClick={handleLikeClick}
-            className={`relative flex items-center space-x-2 px-4 py-2 rounded-none shadow-md hover:shadow-lg transition-all duration-200 transform hover:-translate-y-0.5 ${
-              quote.isLiked
-                ? 'text-red-700'
-                : 'text-gray-700'
-            }`}
-            style={{
-              background: quote.isLiked 
-                ? 'linear-gradient(135deg, #fef2f2 0%, #fecaca 50%, #f87171 100%)'
-                : 'linear-gradient(135deg, #f9fafb 0%, #f3f4f6 50%, #d1d5db 100%)',
-              border: quote.isLiked 
-                ? '2px solid #dc2626'
-                : '2px solid #9ca3af',
-              boxShadow: '2px 2px 4px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.3)',
-              textShadow: '0 1px 0 rgba(255,255,255,0.5)'
-            }}
-          >
-            <svg
-              className={`w-4 h-4 ${quote.isLiked ? 'fill-current' : 'stroke-current fill-none'}`}
-              viewBox="0 0 24 24"
-              strokeWidth="2"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-              />
-            </svg>
-            <span className="text-sm font-medium">{quote.likes}</span>
-          </button>
-        </div>
+                 {/* 좋아요 버튼 - 우측 정렬 */}
+         <div className="flex justify-end">
+           <button
+             onClick={handleLikeClick}
+             className="relative flex items-center space-x-2 p-3 transition-all duration-200 transform hover:-translate-y-0.5 hover:scale-110"
+           >
+             <i className={`text-xl ${quote.isLiked ? 'fas fa-heart text-red-500' : 'far fa-heart text-gray-500'}`}></i>
+             <span className="text-sm font-medium text-gray-700">{quote.likes}</span>
+           </button>
+         </div>
       </div>
     </div>
   );
