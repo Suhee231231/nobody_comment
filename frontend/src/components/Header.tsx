@@ -22,7 +22,7 @@ const Header: React.FC<HeaderProps> = ({ user, onLogout }) => {
         <div className="flex items-center justify-between">
           <Link to="/" className="flex items-center space-x-2">
             <img 
-              src="/icon-32x32.png" 
+              src="/icon-144x144.png" 
               alt="아무개의 명언" 
               className="w-8 h-8 rounded-lg"
             />
