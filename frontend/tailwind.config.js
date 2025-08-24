@@ -5,6 +5,9 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['Noto Sans KR', 'system-ui', 'sans-serif'],
+      },
       colors: {
         primary: {
           50: '#f0f9ff',
