@@ -80,31 +80,17 @@ const QuoteCard: React.FC<QuoteCardProps> = ({
         <div className="absolute inset-0">
           {/* 명언 텍스트와 작성자 - 상단 35% 위치에 고정 */}
           <div className="absolute top-[35%] left-1/2 transform -translate-x-1/2 w-full px-8">
-            {isEditing ? (
-              <div className="flex flex-col items-center space-y-2">
-                <textarea
-                  value={editContent}
-                  onChange={(e) => setEditContent(e.target.value)}
-                  className="w-full text-sm sm:text-base text-gray-800 text-center font-medium font-serif bg-transparent border-none resize-none focus:outline-none"
-                  maxLength={100}
-                  rows={3}
-                />
-                <div className="flex space-x-6 mt-2">
-                  <button
-                    onClick={handleSaveEdit}
-                    className="p-4 text-gray-800 hover:text-gray-900 transition-all duration-200 transform hover:-translate-y-0.5 hover:scale-110"
-                  >
-                    <i className="fas fa-save text-2xl"></i>
-                  </button>
-                  <button
-                    onClick={handleCancelEdit}
-                    className="p-4 text-gray-800 hover:text-gray-900 transition-all duration-200 transform hover:-translate-y-0.5 hover:scale-110"
-                  >
-                    <i className="fas fa-undo text-2xl"></i>
-                  </button>
-                </div>
-              </div>
-            ) : (
+                         {isEditing ? (
+               <div className="flex flex-col items-center space-y-2">
+                 <textarea
+                   value={editContent}
+                   onChange={(e) => setEditContent(e.target.value)}
+                   className="w-full text-sm sm:text-base text-gray-800 text-center font-medium font-serif bg-transparent border-none resize-none focus:outline-none"
+                   maxLength={100}
+                   rows={3}
+                 />
+               </div>
+             ) : (
               <div className="flex flex-col items-center space-y-2">
                 <p className="text-sm sm:text-base text-gray-800 leading-relaxed text-center font-medium font-serif">
                   "{quote.content}"
@@ -122,29 +108,47 @@ const QuoteCard: React.FC<QuoteCardProps> = ({
         </div>
       </div>
       
-      {/* 버튼들 - 카드 밖 하단 */}
-      <div className="flex justify-between items-center -mt-1">
-        {/* 내 글인 경우 수정/삭제 버튼 */}
-        {isMyQuote && !isEditing ? (
-          <div className="flex space-x-3">
-                         <button
-               onClick={handleEditClick}
-               className="relative p-3 text-gray-800 hover:text-gray-900 transition-all duration-200 transform hover:-translate-y-0.5 hover:scale-110"
+             {/* 버튼들 - 카드 밖 하단 */}
+       <div className="flex justify-between items-center -mt-1">
+         {/* 수정 모드일 때 저장/취소 버튼 */}
+         {isEditing ? (
+           <div className="flex space-x-6">
+             <button
+               onClick={handleSaveEdit}
+               className="p-4 text-gray-800 hover:text-gray-900 transition-all duration-200 transform hover:-translate-y-0.5 hover:scale-110"
              >
-               <i className="fas fa-edit text-xl"></i>
+               <i className="fas fa-save text-2xl"></i>
              </button>
-                         <button
-               onClick={handleDeleteClick}
-               className="relative p-3 text-gray-800 hover:text-gray-900 transition-all duration-200 transform hover:-translate-y-0.5 hover:scale-110"
+             <button
+               onClick={handleCancelEdit}
+               className="p-4 text-gray-800 hover:text-gray-900 transition-all duration-200 transform hover:-translate-y-0.5 hover:scale-110"
              >
-               <i className="fas fa-trash text-xl"></i>
+               <i className="fas fa-undo text-2xl"></i>
              </button>
-          </div>
-        ) : (
-          <div></div>
-        )}
-        
-                 {/* 좋아요 버튼 - 우측 정렬 */}
+           </div>
+         ) : (
+           /* 내 글인 경우 수정/삭제 버튼 */
+           isMyQuote ? (
+             <div className="flex space-x-3">
+               <button
+                 onClick={handleEditClick}
+                 className="relative p-3 text-gray-800 hover:text-gray-900 transition-all duration-200 transform hover:-translate-y-0.5 hover:scale-110"
+               >
+                 <i className="fas fa-edit text-xl"></i>
+               </button>
+               <button
+                 onClick={handleDeleteClick}
+                 className="relative p-3 text-gray-800 hover:text-gray-900 transition-all duration-200 transform hover:-translate-y-0.5 hover:scale-110"
+               >
+                 <i className="fas fa-trash text-xl"></i>
+               </button>
+             </div>
+           ) : (
+             <div></div>
+           )
+         )}
+         
+         {/* 좋아요 버튼 - 우측 정렬 */}
          <div className="flex justify-end">
            <button
              onClick={handleLikeClick}
@@ -154,7 +158,7 @@ const QuoteCard: React.FC<QuoteCardProps> = ({
              <span className="text-sm font-medium text-gray-700">{quote.likes}</span>
            </button>
          </div>
-      </div>
+       </div>
     </div>
   );
 };
