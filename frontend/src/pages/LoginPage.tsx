@@ -25,13 +25,8 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
   const [searchParams] = useSearchParams();
 
   useEffect(() => {
-    const code = searchParams.get('code');
-    
-    if (code && !loading && !isProcessingGoogleAuth) {
-      setIsProcessingGoogleAuth(true);
-      setGoogleAuthCode(code);
-      handleGoogleCallback(code);
-    }
+    // Google OAuth 콜백 처리는 App.tsx에서 URL 파라미터로 처리
+    // 여기서는 코드 처리 로직 제거
   }, [searchParams]);
 
   const handleGoogleCallback = async (code: string) => {
@@ -79,9 +74,10 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
     setTermsAgreed(false);
     setPrivacyAgreed(false);
     
-    // 직접 Google OAuth URL로 리다이렉트
+    // 백엔드의 Google OAuth URL로 리다이렉트
+    const backendUrl = process.env.REACT_APP_API_URL || 'https://nobody-comment-backend-production.up.railway.app';
+    const redirectUri = encodeURIComponent(`${backendUrl}/auth/google/callback`);
     const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
-    const redirectUri = encodeURIComponent(window.location.origin);
     const scope = encodeURIComponent('email profile');
     
     const googleAuthUrl = `https://accounts.google.com/o/oauth2/v2/auth?` +
