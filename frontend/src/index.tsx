@@ -19,6 +19,19 @@ if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('/service-worker.js')
       .then((registration) => {
         console.log('SW 등록 성공:', registration.scope);
+        
+        // Service Worker 업데이트 확인
+        registration.addEventListener('updatefound', () => {
+          const newWorker = registration.installing;
+          if (newWorker) {
+            newWorker.addEventListener('statechange', () => {
+              if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                // 새 Service Worker가 설치되었을 때 페이지 새로고침
+                window.location.reload();
+              }
+            });
+          }
+        });
       })
       .catch((registrationError) => {
         console.log('SW 등록 실패:', registrationError);

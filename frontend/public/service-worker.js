@@ -1,10 +1,14 @@
-const CACHE_NAME = 'nobody-comment-v1';
+const CACHE_NAME = 'nobody-comment-v2';
 const urlsToCache = [
   '/',
   '/manifest.json',
   '/favicon.ico',
-  '/logo192.png',
-  '/logo512.png'
+  '/icon-32x32.png',
+  '/icon-144x144.png',
+  '/icon-152x152.png',
+  '/icon-180x180.png',
+  '/icon-192x192.png',
+  '/icon-512x512.png'
 ];
 
 // Service Worker 설치
@@ -34,6 +38,9 @@ self.addEventListener('activate', (event) => {
           }
         })
       );
+    }).then(() => {
+      // 즉시 클라이언트 제어권 가져오기
+      return self.clients.claim();
     })
   );
 });
