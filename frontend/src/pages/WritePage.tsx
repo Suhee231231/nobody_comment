@@ -104,7 +104,7 @@ const WritePage: React.FC = () => {
               id="content"
               value={content}
               onChange={(e) => setContent(e.target.value)}
-              placeholder="오늘의 생각이나 느낌을 100자 이내로 작성해주세요..."
+              placeholder="당신의 단상을 자유롭게 남겨주세요. 누군가에겐 인상적인 한마디가 될 것입니다."
               className="input-field h-32 resize-none"
               maxLength={100}
             />
@@ -133,9 +133,16 @@ const WritePage: React.FC = () => {
             <button
               type="submit"
               disabled={loading || !content.trim()}
-              className="btn-primary flex-1 disabled:opacity-50"
+              className="btn-primary flex-1 disabled:opacity-50 flex items-center justify-center space-x-2"
             >
-              {loading ? '작성 중...' : '명언 작성하기'}
+              {loading ? (
+                '작성 중...'
+              ) : (
+                <>
+                  <i className="fa-solid fa-pen-nib text-2xl"></i>
+                  <span>명언 작성하기</span>
+                </>
+              )}
             </button>
           </div>
         </form>
