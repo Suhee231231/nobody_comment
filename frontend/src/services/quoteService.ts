@@ -45,7 +45,13 @@ class QuoteService {
     try {
       const response = await api.get<Quote>('/quotes/my');
       return response.data;
-    } catch (error) {
+    } catch (error: any) {
+      // 404 에러는 오늘 글을 작성하지 않은 정상적인 상황
+      if (error.response?.status === 404) {
+        return null;
+      }
+      // 다른 에러는 콘솔에 로그만 남기고 null 반환
+      console.error('Failed to get my quote:', error);
       return null;
     }
   }

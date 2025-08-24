@@ -43,6 +43,7 @@ const HomePage: React.FC<HomePageProps> = ({ user }) => {
       const quote = await quoteService.getMyQuote();
       setMyQuote(quote);
     } catch (error) {
+      // getMyQuote에서 이미 에러 처리를 하므로 여기서는 추가 로그만 남김
       console.error('Failed to load my quote:', error);
     }
   };
