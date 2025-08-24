@@ -46,6 +46,9 @@ const QuoteCard: React.FC<QuoteCardProps> = ({
         className="relative w-full aspect-[4/3] bg-contain bg-center bg-no-repeat pixel-card"
         style={{ backgroundImage: 'url(/pixel-card.png)' }}
       >
+        {/* 흰색 배경 오버레이 */}
+        <div className="absolute inset-0 bg-white bg-opacity-90 rounded-lg"></div>
+        
         {/* 명언 내용 - 흰색 영역에 배치 */}
         <div className="absolute inset-0 flex flex-col justify-center px-8 py-8">
           <div className="flex-1 flex flex-col justify-center -mt-4">
