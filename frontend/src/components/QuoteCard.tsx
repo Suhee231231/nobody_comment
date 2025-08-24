@@ -125,7 +125,7 @@ const QuoteCard: React.FC<QuoteCardProps> = ({
       {/* 버튼들 - 카드 밖 하단 */}
       <div className="flex justify-between items-center -mt-1">
         {/* 내 글인 경우 수정/삭제 버튼 */}
-        {isMyQuote && !isEditing && (
+        {isMyQuote && !isEditing ? (
           <div className="flex space-x-2">
             <button
               onClick={handleEditClick}
@@ -140,6 +140,8 @@ const QuoteCard: React.FC<QuoteCardProps> = ({
               삭제
             </button>
           </div>
+        ) : (
+          <div></div>
         )}
         
         {/* 좋아요 버튼 - 우측 정렬 */}
