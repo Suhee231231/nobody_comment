@@ -40,24 +40,24 @@ const QuoteCard: React.FC<QuoteCardProps> = ({
   };
 
   return (
-    <div className="relative w-full max-w-xs mx-auto">
+    <div className="relative w-full max-w-sm mx-auto mb-4">
       {/* 픽셀 아트 카드 배경 */}
       <div 
         className="relative w-full aspect-[4/3] bg-contain bg-center bg-no-repeat pixel-card"
         style={{ backgroundImage: 'url(/pixel-card.png)' }}
       >
         {/* 명언 내용 - 흰색 영역에 배치 */}
-        <div className="absolute inset-0 flex flex-col justify-center px-6 py-4">
-          <div className="flex-1 flex flex-col justify-center">
-            <p className="text-base text-gray-800 leading-relaxed text-center font-medium pixel-text">
+        <div className="absolute inset-0 flex flex-col justify-center px-8 py-8">
+          <div className="flex-1 flex flex-col justify-center -mt-4">
+            <p className="text-sm text-gray-800 leading-tight text-center font-medium pixel-text max-w-[80%] mx-auto">
               "{quote.content}"
             </p>
           </div>
           
           {/* 하단 정보 영역 */}
-          <div className="flex items-center justify-between mt-2">
+          <div className="flex items-center justify-between mt-4">
             <div className="flex items-center space-x-1">
-              <div className="w-5 h-5 bg-gray-200 rounded-full flex items-center justify-center">
+              <div className="w-4 h-4 bg-gray-200 rounded-full flex items-center justify-center">
                 <span className="text-gray-700 font-medium text-xs">
                   {quote.author.username.charAt(0)}
                 </span>
