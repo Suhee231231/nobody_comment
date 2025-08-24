@@ -21,9 +21,11 @@ const Header: React.FC<HeaderProps> = ({ user, onLogout }) => {
       <div className="max-w-4xl mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           <Link to="/" className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-sm">아</span>
-            </div>
+            <img 
+              src="/icon-32x32.png" 
+              alt="아무개의 명언" 
+              className="w-8 h-8 rounded-lg"
+            />
             <h1 className="text-xl font-bold text-gray-900">아무개의 명언</h1>
           </Link>
 
