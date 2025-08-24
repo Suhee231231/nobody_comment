@@ -1,6 +1,11 @@
 const { OAuth2Client } = require('google-auth-library');
 
-const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+// Google OAuth 클라이언트 초기화 (client_secret 포함)
+const client = new OAuth2Client(
+  process.env.GOOGLE_CLIENT_ID,
+  process.env.GOOGLE_CLIENT_SECRET,
+  process.env.GOOGLE_REDIRECT_URI || 'https://nobody-comment.vercel.app'
+);
 
 // Google ID 토큰 검증
 const verifyGoogleToken = async (idToken) => {
@@ -28,7 +33,7 @@ const verifyGoogleToken = async (idToken) => {
 // Google OAuth URL 생성
 const getGoogleAuthUrl = () => {
   const clientId = process.env.GOOGLE_CLIENT_ID;
-  const redirectUri = process.env.GOOGLE_REDIRECT_URI;
+  const redirectUri = process.env.GOOGLE_REDIRECT_URI || 'https://nobody-comment.vercel.app';
   const scope = 'email profile';
   
   const url = `https://accounts.google.com/o/oauth2/v2/auth?` +
@@ -45,7 +50,15 @@ const getGoogleAuthUrl = () => {
 // Google OAuth 코드를 액세스 토큰으로 교환
 const exchangeCodeForToken = async (code) => {
   try {
-    // 환경 변수 확인
+    // 환경 변수 확인 및 디버깅
+    console.log('Google OAuth environment variables check:', {
+      hasClientId: !!process.env.GOOGLE_CLIENT_ID,
+      hasClientSecret: !!process.env.GOOGLE_CLIENT_SECRET,
+      hasRedirectUri: !!process.env.GOOGLE_REDIRECT_URI,
+      clientIdLength: process.env.GOOGLE_CLIENT_ID?.length,
+      clientSecretLength: process.env.GOOGLE_CLIENT_SECRET?.length
+    });
+
     if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
       console.error('Missing Google OAuth environment variables:', {
         hasClientId: !!process.env.GOOGLE_CLIENT_ID,
@@ -54,12 +67,8 @@ const exchangeCodeForToken = async (code) => {
       throw new Error('Google OAuth configuration is incomplete');
     }
 
-    const { tokens } = await client.getToken({
-      code,
-      client_id: process.env.GOOGLE_CLIENT_ID,
-      client_secret: process.env.GOOGLE_CLIENT_SECRET,
-      redirect_uri: process.env.GOOGLE_REDIRECT_URI
-    });
+    // OAuth2Client의 getToken 메서드 사용 (client_secret이 이미 포함됨)
+    const { tokens } = await client.getToken(code);
     
     return tokens;
   } catch (error) {

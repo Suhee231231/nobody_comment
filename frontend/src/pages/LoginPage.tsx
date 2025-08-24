@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useGoogleLogin } from '@react-oauth/google';
 import authService, { LoginData } from '../services/authService';
 
@@ -21,7 +21,47 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
   const [googleAuthCode, setGoogleAuthCode] = useState('');
   const [termsAgreed, setTermsAgreed] = useState(false);
   const [privacyAgreed, setPrivacyAgreed] = useState(false);
+  const [isProcessingGoogleAuth, setIsProcessingGoogleAuth] = useState(false);
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+
+  useEffect(() => {
+    const code = searchParams.get('code');
+    if (code && !loading && !isProcessingGoogleAuth) {
+      setIsProcessingGoogleAuth(true);
+      setGoogleAuthCode(code);
+      handleGoogleCallback(code);
+    }
+  }, [searchParams]);
+
+  const handleGoogleCallback = async (code: string) => {
+    try {
+      setLoading(true);
+      setError('');
+      
+      // URL에서 인증 코드 제거 (보안 강화)
+      window.history.replaceState({}, document.title, window.location.pathname);
+      
+      // 먼저 기존 사용자인지 확인
+      const result = await authService.googleCallback(code);
+      
+      // 기존 사용자인 경우 바로 로그인
+      onLogin();
+      navigate('/');
+    } catch (error: any) {
+      console.error('Google login check failed:', error);
+      
+      // 새 사용자인 경우 약관 동의 모달 표시
+      if (error.response?.status === 404 && error.response?.data?.isNewUser) {
+        setShowTerms('signup'); // Google 회원가입 약관 동의 모달 표시
+      } else {
+        setError(error.response?.data?.message || '구글 로그인에 실패했습니다.');
+      }
+    } finally {
+      setLoading(false);
+      setIsProcessingGoogleAuth(false);
+    }
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -32,38 +72,13 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
   };
 
   const googleLogin = useGoogleLogin({
-    onSuccess: async (response) => {
-      try {
-        setLoading(true);
-        setError('');
-        
-        // Google 인증 코드 저장
-        setGoogleAuthCode(response.code);
-        
-        // 먼저 기존 사용자인지 확인
-        const result = await authService.googleCallback(response.code);
-        
-        // 기존 사용자인 경우 바로 로그인
-        onLogin();
-        navigate('/');
-      } catch (error: any) {
-        console.error('Google login check failed:', error);
-        
-        // 새 사용자인 경우 약관 동의 모달 표시
-        if (error.response?.status === 404 && error.response?.data?.isNewUser) {
-          setShowTerms('signup'); // Google 회원가입 약관 동의 모달 표시
-        } else {
-          setError(error.response?.data?.message || '구글 로그인에 실패했습니다.');
-        }
-      } finally {
-        setLoading(false);
-      }
-    },
     onError: () => {
       setError('구글 로그인에 실패했습니다.');
       setLoading(false);
     },
-    flow: 'auth-code'
+    flow: 'auth-code',
+    ux_mode: 'redirect',
+    redirect_uri: window.location.origin
   });
 
   const handleGoogleLogin = () => {
