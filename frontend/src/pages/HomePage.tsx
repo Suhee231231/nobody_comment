@@ -127,12 +127,7 @@ const HomePage: React.FC<HomePageProps> = ({ user }) => {
       {user && (
         <div className="mb-8">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-bold text-gray-900">내 오늘의 명언</h2>
-            {!myQuote && (
-              <Link to="/write" className="btn-primary">
-                글쓰기
-              </Link>
-            )}
+            <h2 className="text-xl font-bold text-gray-900">나의 명언</h2>
           </div>
           
           {myQuote ? (
@@ -147,10 +142,10 @@ const HomePage: React.FC<HomePageProps> = ({ user }) => {
           ) : (
             <div className="card text-center py-8">
               <p className="text-gray-600 mb-4">
-                오늘의 명언을 작성해보세요
+                오늘의 명언을 작성해보세요. 자정이 지나면 자동으로 삭제됩니다.
               </p>
               <Link to="/write" className="btn-primary">
-                첫 명언 작성하기
+                작성하기
               </Link>
             </div>
           )}
@@ -160,7 +155,7 @@ const HomePage: React.FC<HomePageProps> = ({ user }) => {
       {/* 모든 명언 섹션 */}
       <div>
         <h2 className="text-xl font-bold text-gray-900 mb-6">
-          오늘의 명언들
+          오늘의 명언
         </h2>
         
         {quotes.length === 0 && !loading ? (
@@ -170,7 +165,7 @@ const HomePage: React.FC<HomePageProps> = ({ user }) => {
             </p>
             {user && (
               <Link to="/write" className="btn-primary">
-                첫 명언 작성하기
+                작성하기
               </Link>
             )}
           </div>

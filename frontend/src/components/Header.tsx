@@ -30,12 +30,6 @@ const Header: React.FC<HeaderProps> = ({ user, onLogout }) => {
           <nav className="flex items-center space-x-4">
             {user ? (
               <>
-                <Link 
-                  to="/write" 
-                  className="btn-primary"
-                >
-                  글쓰기
-                </Link>
                 <div className="flex items-center space-x-2">
                   <span className="text-sm text-gray-600">
                     {user.username}님
