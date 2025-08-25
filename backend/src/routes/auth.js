@@ -54,23 +54,13 @@ router.post('/register', async (req, res) => {
     // 토큰을 데이터베이스에 업데이트
     await User.updateVerificationToken(user.id, actualVerificationToken);
 
-    // 개발 환경에서는 이메일 인증을 자동으로 완료 (더 넓은 범위)
-    if (process.env.NODE_ENV === 'development' || 
-        email.includes('temp') || 
-        email.includes('test') || 
-        email.includes('gmail') || 
-        email.includes('google')) {
-      console.log('개발 환경: 이메일 인증 자동 완료');
-      await User.verifyEmail(actualVerificationToken);
-    } else {
-      // 인증 이메일 발송
-      const emailSent = await sendVerificationEmail(email, user.username, actualVerificationToken);
-      
-      if (!emailSent) {
-        // 이메일 발송 실패 시 사용자 삭제
-        await User.deleteAccount(user.id);
-        return res.status(500).json({ message: '이메일 발송에 실패했습니다. 다시 시도해주세요.' });
-      }
+    // 인증 이메일 발송
+    const emailSent = await sendVerificationEmail(email, user.username, actualVerificationToken);
+    
+    if (!emailSent) {
+      // 이메일 발송 실패 시 사용자 삭제
+      await User.deleteAccount(user.id);
+      return res.status(500).json({ message: '이메일 발송에 실패했습니다. 다시 시도해주세요.' });
     }
 
     res.status(201).json({
