@@ -98,8 +98,15 @@ const exchangeCodeForToken = async (code) => {
       throw new Error('Google OAuth configuration is incomplete');
     }
 
-    // OAuth2Client의 getToken 메서드 사용 (client_secret이 이미 포함됨)
-    const { tokens } = await client.getToken(code);
+    // 명시적으로 리다이렉트 URI 지정
+    const redirectUri = process.env.GOOGLE_REDIRECT_URI || 'https://nobody-comment.vercel.app/login';
+    console.log('Using redirect URI for token exchange:', redirectUri);
+
+    // OAuth2Client의 getToken 메서드 사용 (리다이렉트 URI 명시)
+    const { tokens } = await client.getToken({
+      code,
+      redirect_uri: redirectUri
+    });
     
     return tokens;
   } catch (error) {
