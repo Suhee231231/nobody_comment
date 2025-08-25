@@ -55,7 +55,7 @@ class AuthService {
   }
 
   async verifyEmail(token: string): Promise<EmailVerificationResponse> {
-    const response = await api.post<EmailVerificationResponse>('/auth/verify-email', { token });
+    const response = await api.get<EmailVerificationResponse>(`/auth/verify-email/${token}`);
     return response.data;
   }
 

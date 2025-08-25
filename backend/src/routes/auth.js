@@ -141,7 +141,7 @@ router.get('/verify-email/:token', async (req, res) => {
     }
 
     // 이메일 인증 완료
-    await User.updateEmailVerified(user.id, true);
+    const verifiedUser = await User.verifyEmail(token);
 
     res.json({ message: '이메일 인증이 완료되었습니다.' });
   } catch (error) {
