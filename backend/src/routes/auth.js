@@ -149,7 +149,24 @@ router.get('/verify-email/:token', async (req, res) => {
     // 이메일 인증 완료
     const verifiedUser = await User.verifyEmail(token);
 
-    res.json({ message: '이메일 인증이 완료되었습니다.' });
+    // JWT 토큰 생성
+    const authToken = jwt.sign(
+      { userId: verifiedUser.id },
+      process.env.JWT_SECRET,
+      { expiresIn: '7d' }
+    );
+
+    res.json({ 
+      message: '이메일 인증이 완료되었습니다.',
+      token: authToken,
+      user: {
+        id: verifiedUser.id,
+        email: verifiedUser.email,
+        username: verifiedUser.username,
+        emailVerified: verifiedUser.email_verified,
+        isAdmin: verifiedUser.is_admin
+      }
+    });
   } catch (error) {
     console.error('Email verification error:', error);
     res.status(400).json({ message: '유효하지 않은 인증 링크입니다.' });
