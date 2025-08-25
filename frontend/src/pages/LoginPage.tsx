@@ -3,7 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import authService from '../services/authService';
 import './LoginPage.css';
 
-const LoginPage: React.FC = () => {
+interface LoginPageProps {
+  onLogin?: () => void;
+}
+
+const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -21,6 +25,7 @@ const LoginPage: React.FC = () => {
       console.log('로그인 응답:', response);
       if (response.token) {
         console.log('토큰 저장됨, 홈으로 이동');
+        onLogin?.(); // 로그인 상태 업데이트
         navigate('/');
       }
     } catch (err: any) {
