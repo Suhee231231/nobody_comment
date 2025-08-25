@@ -4,7 +4,7 @@ const { OAuth2Client } = require('google-auth-library');
 const client = new OAuth2Client(
   process.env.GOOGLE_CLIENT_ID,
   process.env.GOOGLE_CLIENT_SECRET,
-  process.env.GOOGLE_REDIRECT_URI || 'https://nobody-comment.vercel.app/login'
+  process.env.GOOGLE_REDIRECT_URI || 'https://nobodycomment-production.up.railway.app/auth/google/callback'
 );
 
 // Google ID 토큰 검증
@@ -57,7 +57,7 @@ const getUserInfoFromGoogle = async (accessToken) => {
 // Google OAuth URL 생성
 const getGoogleAuthUrl = () => {
   const clientId = process.env.GOOGLE_CLIENT_ID;
-  const redirectUri = process.env.GOOGLE_REDIRECT_URI || 'https://nobody-comment.vercel.app/login';
+  const redirectUri = process.env.GOOGLE_REDIRECT_URI || 'https://nobodycomment-production.up.railway.app/auth/google/callback';
   const scope = 'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile openid';
   
   const url = `https://accounts.google.com/o/oauth2/v2/auth?` +
