@@ -73,7 +73,7 @@ router.post('/login', async (req, res) => {
     }
 
     // 비밀번호 확인
-    const isValidPassword = await bcrypt.compare(password, user.password);
+    const isValidPassword = await bcrypt.compare(password, user.password_hash);
     if (!isValidPassword) {
       return res.status(401).json({ message: '이메일 또는 비밀번호가 올바르지 않습니다.' });
     }
