@@ -2,7 +2,7 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
-const { sendVerificationEmail } = require('../utils/emailService');
+const { sendVerificationEmail, sendPasswordResetEmail } = require('../utils/emailService');
 const { authenticateToken } = require('../middleware/auth');
 
 const router = express.Router();
@@ -158,6 +158,82 @@ router.get('/me', authenticateToken, async (req, res) => {
 // 로그아웃
 router.post('/logout', (req, res) => {
   res.json({ message: '로그아웃되었습니다.' });
+});
+
+// 비밀번호 재설정 요청
+router.post('/forgot-password', async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({ message: '이메일을 입력해주세요.' });
+    }
+
+    // 사용자 찾기
+    const user = await User.findByEmail(email);
+    
+    // 보안을 위해 사용자가 존재하지 않아도 성공 메시지 반환
+    if (!user) {
+      return res.json({ message: '비밀번호 재설정 이메일을 발송했습니다.' });
+    }
+
+    // 비밀번호 재설정 토큰 생성
+    const resetToken = jwt.sign(
+      { userId: user.id, type: 'password_reset' },
+      process.env.JWT_SECRET,
+      { expiresIn: '1h' }
+    );
+
+    // 비밀번호 재설정 이메일 발송
+    await sendPasswordResetEmail(email, user.username, resetToken);
+
+    res.json({ message: '비밀번호 재설정 이메일을 발송했습니다.' });
+  } catch (error) {
+    console.error('Forgot password error:', error);
+    res.status(500).json({ message: '서버 오류가 발생했습니다.' });
+  }
+});
+
+// 비밀번호 재설정
+router.post('/reset-password', async (req, res) => {
+  try {
+    const { token, newPassword } = req.body;
+
+    if (!token || !newPassword) {
+      return res.status(400).json({ message: '토큰과 새 비밀번호가 필요합니다.' });
+    }
+
+    if (newPassword.length < 6) {
+      return res.status(400).json({ message: '비밀번호는 6자 이상이어야 합니다.' });
+    }
+
+    // 토큰 검증
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    
+    if (decoded.type !== 'password_reset') {
+      return res.status(400).json({ message: '유효하지 않은 토큰입니다.' });
+    }
+
+    // 사용자 찾기
+    const user = await User.findById(decoded.userId);
+    
+    if (!user) {
+      return res.status(400).json({ message: '유효하지 않은 토큰입니다.' });
+    }
+
+    // 비밀번호 업데이트
+    await User.updatePassword(user.id, newPassword);
+
+    res.json({ message: '비밀번호가 성공적으로 변경되었습니다.' });
+  } catch (error) {
+    console.error('Reset password error:', error);
+    
+    if (error.name === 'JsonWebTokenError' || error.name === 'TokenExpiredError') {
+      return res.status(400).json({ message: '유효하지 않거나 만료된 토큰입니다.' });
+    }
+    
+    res.status(500).json({ message: '서버 오류가 발생했습니다.' });
+  }
 });
 
 module.exports = router;
