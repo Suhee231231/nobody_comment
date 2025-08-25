@@ -14,8 +14,11 @@ const ResetPasswordPage: React.FC = () => {
   const [token, setToken] = useState<string | null>(null);
 
   useEffect(() => {
+    console.log('ResetPasswordPage mounted');
     const tokenParam = searchParams.get('token');
+    console.log('Token from URL:', tokenParam);
     if (!tokenParam) {
+      console.log('No token found in URL');
       setError('유효하지 않은 비밀번호 재설정 링크입니다.');
       return;
     }
@@ -69,6 +72,19 @@ const ResetPasswordPage: React.FC = () => {
           </div>
           <div className="reset-password-links">
             <Link to="/login" className="login-link">로그인하기</Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!token && !error) {
+    return (
+      <div className="reset-password-page">
+        <div className="reset-password-container">
+          <div className="loading-message">
+            <h1>로딩 중...</h1>
+            <p>비밀번호 재설정 페이지를 불러오는 중입니다.</p>
           </div>
         </div>
       </div>
