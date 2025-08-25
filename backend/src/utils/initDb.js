@@ -37,6 +37,15 @@ async function runMigration() {
           ALTER TABLE users ADD COLUMN IF NOT EXISTS is_admin BOOLEAN DEFAULT FALSE;
           CREATE INDEX IF NOT EXISTS idx_users_is_admin ON users(is_admin);
         `
+      },
+      {
+        name: 'add_terms_columns',
+        sql: `
+          ALTER TABLE users ADD COLUMN IF NOT EXISTS terms_agreed BOOLEAN DEFAULT FALSE;
+          ALTER TABLE users ADD COLUMN IF NOT EXISTS privacy_agreed BOOLEAN DEFAULT FALSE;
+          ALTER TABLE users ADD COLUMN IF NOT EXISTS terms_agreed_at TIMESTAMP WITH TIME ZONE;
+          ALTER TABLE users ADD COLUMN IF NOT EXISTS privacy_agreed_at TIMESTAMP WITH TIME ZONE;
+        `
       }
     ];
     

@@ -281,7 +281,11 @@ router.post('/create-admin', async (req, res) => {
     });
   } catch (error) {
     console.error('Create admin error:', error);
-    res.status(500).json({ message: '서버 오류가 발생했습니다.' });
+    res.status(500).json({ 
+      message: '서버 오류가 발생했습니다.',
+      error: error.message,
+      stack: error.stack
+    });
   }
 });
 
