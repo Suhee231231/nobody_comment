@@ -33,9 +33,12 @@ const Header: React.FC<HeaderProps> = ({ user, onLogout }) => {
             {user ? (
               <>
                 <div className="flex items-center space-x-2">
-                  <span className="text-sm text-gray-600">
+                  <Link 
+                    to="/profile" 
+                    className="text-sm text-gray-600 hover:text-gray-900 font-medium"
+                  >
                     {user.username}님
-                  </span>
+                  </Link>
                   <button
                     onClick={handleLogout}
                     className="text-sm text-gray-500 hover:text-gray-700"

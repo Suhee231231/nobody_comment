@@ -130,6 +130,23 @@ class AuthService {
   isAuthenticated(): boolean {
     return !!localStorage.getItem('token');
   }
+
+  async updateUsername(username: string): Promise<User> {
+    const response = await api.put<{ user: User }>('/auth/username', { username });
+    const { user } = response.data;
+    localStorage.setItem('user', JSON.stringify(user));
+    return user;
+  }
+
+  async changePassword(currentPassword: string, newPassword: string): Promise<void> {
+    await api.put('/auth/password', { currentPassword, newPassword });
+  }
+
+  async deleteAccount(): Promise<void> {
+    await api.delete('/auth/account');
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+  }
 }
 
 export default new AuthService();

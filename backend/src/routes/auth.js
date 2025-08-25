@@ -289,4 +289,104 @@ router.post('/create-admin', async (req, res) => {
   }
 });
 
+// 사용자명 수정
+router.put('/username', authenticateToken, async (req, res) => {
+  try {
+    const { username } = req.body;
+    const userId = req.user.id;
+
+    if (!username || !username.trim()) {
+      return res.status(400).json({ message: '사용자명을 입력해주세요.' });
+    }
+
+    if (username.length > 20) {
+      return res.status(400).json({ message: '사용자명은 20자 이하여야 합니다.' });
+    }
+
+    // 사용자명 중복 확인
+    const existingUser = await User.findByUsername(username);
+    if (existingUser && existingUser.id !== userId) {
+      return res.status(400).json({ message: '이미 사용 중인 사용자명입니다.' });
+    }
+
+    // 사용자명 업데이트
+    await User.updateUsername(userId, username.trim());
+
+    // 업데이트된 사용자 정보 조회
+    const updatedUser = await User.findById(userId);
+
+    res.json({
+      message: '사용자명이 변경되었습니다.',
+      user: {
+        id: updatedUser.id,
+        email: updatedUser.email,
+        username: updatedUser.username,
+        emailVerified: updatedUser.email_verified,
+        isAdmin: updatedUser.is_admin
+      }
+    });
+  } catch (error) {
+    console.error('Update username error:', error);
+    res.status(500).json({ message: '서버 오류가 발생했습니다.' });
+  }
+});
+
+// 비밀번호 변경
+router.put('/password', authenticateToken, async (req, res) => {
+  try {
+    const { currentPassword, newPassword } = req.body;
+    const userId = req.user.id;
+
+    if (!currentPassword || !newPassword) {
+      return res.status(400).json({ message: '현재 비밀번호와 새 비밀번호를 입력해주세요.' });
+    }
+
+    if (newPassword.length < 6) {
+      return res.status(400).json({ message: '새 비밀번호는 6자 이상이어야 합니다.' });
+    }
+
+    // 현재 사용자 정보 조회
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: '사용자를 찾을 수 없습니다.' });
+    }
+
+    // 현재 비밀번호 확인
+    const isValidPassword = await bcrypt.compare(currentPassword, user.password_hash);
+    if (!isValidPassword) {
+      return res.status(400).json({ message: '현재 비밀번호가 올바르지 않습니다.' });
+    }
+
+    // 새 비밀번호 해시화 및 업데이트
+    const hashedNewPassword = await bcrypt.hash(newPassword, 12);
+    await User.updatePassword(userId, hashedNewPassword);
+
+    res.json({ message: '비밀번호가 변경되었습니다.' });
+  } catch (error) {
+    console.error('Change password error:', error);
+    res.status(500).json({ message: '서버 오류가 발생했습니다.' });
+  }
+});
+
+// 회원탈퇴
+router.delete('/account', authenticateToken, async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    // 사용자 정보 조회
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: '사용자를 찾을 수 없습니다.' });
+    }
+
+    // 사용자 관련 데이터 삭제 (명언, 좋아요 등)
+    await User.deleteAccount(userId);
+
+    res.json({ message: '회원탈퇴가 완료되었습니다.' });
+  } catch (error) {
+    console.error('Delete account error:', error);
+    res.status(500).json({ message: '서버 오류가 발생했습니다.' });
+  }
+});
+
 module.exports = router;

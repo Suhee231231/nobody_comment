@@ -9,6 +9,7 @@ import VerifyEmailPage from './pages/VerifyEmailPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import ResetPasswordPage from './pages/ResetPasswordPage';
 import WritePage from './pages/WritePage';
+import ProfilePage from './pages/ProfilePage';
 import './App.css';
 
 function App() {
@@ -91,6 +92,14 @@ function App() {
             element={
               isAuthenticated ? 
               <WritePage /> : 
+              <Navigate to="/login" replace />
+            } 
+          />
+          <Route 
+            path="/profile" 
+            element={
+              isAuthenticated ? 
+              <ProfilePage user={user} onLogout={handleLogout} /> : 
               <Navigate to="/login" replace />
             } 
           />

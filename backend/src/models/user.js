@@ -226,6 +226,43 @@ class User {
     
     return result.rows[0] || null;
   }
+
+  static async updateUsername(userId, username) {
+    const result = await pool.query(
+      `UPDATE users 
+       SET username = $1 
+       WHERE id = $2 
+       RETURNING id, username, email`,
+      [username, userId]
+    );
+    
+    return result.rows[0] || null;
+  }
+
+  static async deleteAccount(userId) {
+    // 트랜잭션 시작
+    const client = await pool.connect();
+    
+    try {
+      await client.query('BEGIN');
+      
+      // 사용자의 명언 삭제
+      await client.query('DELETE FROM quotes WHERE author_id = $1', [userId]);
+      
+      // 사용자의 좋아요 삭제
+      await client.query('DELETE FROM likes WHERE user_id = $1', [userId]);
+      
+      // 사용자 삭제
+      await client.query('DELETE FROM users WHERE id = $1', [userId]);
+      
+      await client.query('COMMIT');
+    } catch (error) {
+      await client.query('ROLLBACK');
+      throw error;
+    } finally {
+      client.release();
+    }
+  }
 }
 
 module.exports = User;
