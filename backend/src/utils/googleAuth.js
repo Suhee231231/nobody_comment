@@ -74,17 +74,17 @@ const getGoogleAuthUrl = () => {
   return url;
 };
 
-// Google OAuth 코드를 액세스 토큰으로 교환 (새로운 방식)
+// Google OAuth 코드를 액세스 토큰으로 교환 (완전 수동 방식)
 const exchangeCodeForToken = async (code) => {
   try {
-    console.log('Starting token exchange with code:', { codeLength: code?.length });
+    console.log('Starting manual token exchange with code:', { codeLength: code?.length });
     
     // 환경 변수 확인
     if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
       throw new Error('Google OAuth configuration is incomplete');
     }
 
-    // 리다이렉트 URI 설정 (getGoogleAuthUrl과 동일하게)
+    // 리다이렉트 URI 설정
     const redirectUri = process.env.GOOGLE_REDIRECT_URI || 'https://nobody-comment.vercel.app/login';
     console.log('Using redirect URI:', redirectUri);
     console.log('Environment variables check:', {
@@ -94,20 +94,33 @@ const exchangeCodeForToken = async (code) => {
       CLIENT_ID_PREFIX: process.env.GOOGLE_CLIENT_ID?.substring(0, 20) + '...'
     });
 
+    // 수동으로 URLSearchParams 생성
+    const params = new URLSearchParams();
+    params.append('code', code);
+    params.append('client_id', process.env.GOOGLE_CLIENT_ID);
+    params.append('client_secret', process.env.GOOGLE_CLIENT_SECRET);
+    params.append('redirect_uri', redirectUri);
+    params.append('grant_type', 'authorization_code');
+
+    console.log('Request parameters:', {
+      code: code.substring(0, 10) + '...',
+      client_id: process.env.GOOGLE_CLIENT_ID?.substring(0, 20) + '...',
+      redirect_uri: redirectUri,
+      grant_type: 'authorization_code'
+    });
+
     // Google OAuth 토큰 엔드포인트로 직접 요청
     const tokenResponse = await fetch('https://oauth2.googleapis.com/token', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
+        'Accept': 'application/json'
       },
-      body: new URLSearchParams({
-        code: code,
-        client_id: process.env.GOOGLE_CLIENT_ID,
-        client_secret: process.env.GOOGLE_CLIENT_SECRET,
-        redirect_uri: redirectUri,
-        grant_type: 'authorization_code',
-      }),
+      body: params.toString()
     });
+
+    console.log('Token response status:', tokenResponse.status);
+    console.log('Token response headers:', Object.fromEntries(tokenResponse.headers.entries()));
 
     if (!tokenResponse.ok) {
       const errorData = await tokenResponse.json();
@@ -117,7 +130,8 @@ const exchangeCodeForToken = async (code) => {
         client_id: process.env.GOOGLE_CLIENT_ID?.substring(0, 20) + '...',
         redirect_uri: redirectUri,
         status: tokenResponse.status,
-        statusText: tokenResponse.statusText
+        statusText: tokenResponse.statusText,
+        responseBody: errorData
       });
       throw new Error(`Token exchange failed: ${errorData.error} - ${errorData.error_description}`);
     }
