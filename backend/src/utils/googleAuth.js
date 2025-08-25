@@ -52,7 +52,8 @@ const getUserInfoFromGoogle = async (accessToken) => {
 
 // Google OAuth URL 생성
 const getGoogleAuthUrl = () => {
-  const clientId = process.env.GOOGLE_CLIENT_ID;
+  // 임시로 새 클라이언트 ID 사용 (테스트용)
+  const clientId = process.env.GOOGLE_CLIENT_ID || '새로운_클라이언트_ID.apps.googleusercontent.com';
   const redirectUri = process.env.GOOGLE_REDIRECT_URI || 'https://nobody-comment.vercel.app';
   const scope = 'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile openid';
   
