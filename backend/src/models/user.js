@@ -75,7 +75,7 @@ class User {
   
   static async findById(id) {
     const result = await pool.query(
-      'SELECT id, username, email, email_verified, created_at FROM users WHERE id = $1 AND deleted_at IS NULL',
+      'SELECT id, username, email, email_verified, is_admin, created_at FROM users WHERE id = $1 AND deleted_at IS NULL',
       [id]
     );
     

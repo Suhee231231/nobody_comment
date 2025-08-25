@@ -108,13 +108,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ user, onLogout, onUserUpdate 
     }
   };
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('ko-KR', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
-  };
+
 
   if (!currentUser) {
     return null;
@@ -186,14 +180,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ user, onLogout, onUserUpdate 
               )}
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">가입일</label>
-              <p className="text-gray-900 bg-gray-50 px-3 py-2 rounded-md">
-                {formatDate(currentUser.createdAt)}
-              </p>
-            </div>
-
-            {currentUser.isAdmin && (
+                         {currentUser.isAdmin && (
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">권한</label>
                 <p className="text-blue-600 bg-blue-50 px-3 py-2 rounded-md font-medium">

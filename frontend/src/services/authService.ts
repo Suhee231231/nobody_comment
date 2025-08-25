@@ -115,8 +115,8 @@ class AuthService {
 
   async getCurrentUser(): Promise<User | null> {
     try {
-      const response = await api.get<User>('/auth/me');
-      return response.data;
+      const response = await api.get<{ user: User }>('/auth/me');
+      return response.data.user;
     } catch (error) {
       return null;
     }
