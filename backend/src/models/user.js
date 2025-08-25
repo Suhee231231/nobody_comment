@@ -185,6 +185,18 @@ class User {
     
     return result.rows[0] || null;
   }
+
+  static async updateEmailVerified(userId, emailVerified) {
+    const result = await pool.query(
+      `UPDATE users 
+       SET email_verified = $1 
+       WHERE id = $2 
+       RETURNING id, username, email, email_verified`,
+      [emailVerified, userId]
+    );
+    
+    return result.rows[0] || null;
+  }
 }
 
 module.exports = User;

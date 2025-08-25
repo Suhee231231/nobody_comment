@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const { sendVerificationEmail } = require('../utils/emailService');
-const auth = require('../middleware/auth');
+const { authenticateToken } = require('../middleware/auth');
 
 const router = express.Router();
 
@@ -30,10 +30,10 @@ router.post('/register', async (req, res) => {
 
     // 사용자 생성
     const user = await User.create({
+      username,
       email,
       password: hashedPassword,
-      username,
-      emailVerified: false
+      verificationToken: null
     });
 
     // 이메일 인증 토큰 생성
@@ -44,7 +44,7 @@ router.post('/register', async (req, res) => {
     );
 
     // 인증 이메일 발송
-    await sendVerificationEmail(email, verificationToken);
+    await sendVerificationEmail(email, user.username, verificationToken);
 
     res.status(201).json({
       message: '회원가입이 완료되었습니다. 이메일을 확인하여 인증을 완료해주세요.',
@@ -79,7 +79,7 @@ router.post('/login', async (req, res) => {
     }
 
     // 이메일 인증 확인
-    if (!user.emailVerified) {
+    if (!user.email_verified) {
       return res.status(401).json({ message: '이메일 인증을 완료해주세요.' });
     }
 
@@ -97,7 +97,7 @@ router.post('/login', async (req, res) => {
         id: user.id,
         email: user.email,
         username: user.username,
-        emailVerified: user.emailVerified
+        emailVerified: user.email_verified
       }
     });
   } catch (error) {
@@ -134,9 +134,9 @@ router.get('/verify-email/:token', async (req, res) => {
 });
 
 // 사용자 정보 조회
-router.get('/me', auth, async (req, res) => {
+router.get('/me', authenticateToken, async (req, res) => {
   try {
-    const user = await User.findById(req.user.userId);
+    const user = await User.findById(req.user.id);
     if (!user) {
       return res.status(404).json({ message: '사용자를 찾을 수 없습니다.' });
     }
@@ -146,7 +146,7 @@ router.get('/me', auth, async (req, res) => {
         id: user.id,
         email: user.email,
         username: user.username,
-        emailVerified: user.emailVerified
+        emailVerified: user.email_verified
       }
     });
   } catch (error) {
