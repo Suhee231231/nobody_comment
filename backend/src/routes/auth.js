@@ -21,35 +21,54 @@ router.get('/google/url', (req, res) => {
 // Google OAuth 콜백 처리 (POST 요청으로 변경)
 router.post('/google/callback', async (req, res) => {
   try {
+    console.log('Google OAuth callback received:', {
+      body: req.body,
+      headers: req.headers,
+      method: req.method
+    });
+    
     const { code } = req.body;
     
     if (!code) {
+      console.error('No code provided in request body');
       return res.status(400).json({ message: '인증 코드가 필요합니다.' });
     }
     
+    console.log('Processing Google OAuth code:', { codeLength: code.length });
+    
     // 코드를 액세스 토큰으로 교환
     const tokens = await exchangeCodeForToken(code);
+    console.log('Token exchange successful:', { hasIdToken: !!tokens.id_token });
     
     // ID 토큰에서 사용자 정보 추출
     const userInfo = await verifyGoogleToken(tokens.id_token);
+    console.log('User info extracted:', { 
+      googleId: userInfo.googleId, 
+      email: userInfo.email, 
+      name: userInfo.name 
+    });
     
     // 기존 사용자 확인
     let user = await User.findByGoogleId(userInfo.googleId);
+    console.log('User lookup result:', { foundByGoogleId: !!user });
     
     if (!user) {
       // 이메일로 기존 사용자 확인
       user = await User.findByEmail(userInfo.email);
+      console.log('User lookup by email result:', { foundByEmail: !!user });
       
       if (user) {
         // 기존 사용자에게 Google ID 연결
         try {
           await User.updateGoogleId(user.id, userInfo.googleId);
+          console.log('Google ID updated for existing user');
         } catch (updateError) {
           console.error('Failed to update Google ID:', updateError);
           return res.status(400).json({ message: '이미 가입된 이메일입니다. 일반 로그인을 이용해주세요.' });
         }
       } else {
         // 새 사용자인 경우 404 에러 반환 (프론트엔드에서 약관 동의 모달 표시)
+        console.log('New user detected, returning 404 for terms agreement');
         return res.status(404).json({ 
           message: '새 사용자입니다. 약관 동의가 필요합니다.',
           isNewUser: true,
@@ -63,6 +82,7 @@ router.post('/google/callback', async (req, res) => {
     }
     
     const token = generateToken(user.id);
+    console.log('JWT token generated for user:', { userId: user.id });
     
     // JSON 응답으로 변경 (리다이렉트 대신)
     res.json({
@@ -79,6 +99,7 @@ router.post('/google/callback', async (req, res) => {
     
   } catch (error) {
     console.error('Google OAuth callback failed:', error);
+    console.error('Error stack:', error.stack);
     
     // 더 구체적인 에러 메시지
     if (error.message === 'Google OAuth configuration is incomplete') {
