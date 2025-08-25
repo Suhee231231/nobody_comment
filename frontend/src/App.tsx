@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { authService } from './services/authService';
+import authService, { User } from './services/authService';
 import Header from './components/Header';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
@@ -11,7 +11,7 @@ import './App.css';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -22,9 +22,11 @@ function App() {
     try {
       const token = localStorage.getItem('token');
       if (token) {
-        const response = await authService.getMe();
-        setUser(response.user);
-        setIsAuthenticated(true);
+        const response = await authService.getCurrentUser();
+        if (response) {
+          setUser(response);
+          setIsAuthenticated(true);
+        }
       }
     } catch (error) {
       console.error('Auth check failed:', error);
@@ -63,13 +65,13 @@ function App() {
           onLogout={handleLogout} 
         />
         <Routes>
-          <Route path="/" element={<HomePage />} />
+          <Route path="/" element={<HomePage user={user} />} />
           <Route 
             path="/login" 
             element={
               isAuthenticated ? 
               <Navigate to="/" replace /> : 
-              <LoginPage onLogin={handleLogin} />
+              <LoginPage />
             } 
           />
           <Route 
@@ -77,7 +79,7 @@ function App() {
             element={
               isAuthenticated ? 
               <Navigate to="/" replace /> : 
-              <RegisterPage onLogin={handleLogin} />
+              <RegisterPage />
             } 
           />
           <Route path="/verify-email/:token" element={<VerifyEmailPage />} />
