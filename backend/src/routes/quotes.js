@@ -253,28 +253,35 @@ router.put('/:id', authenticateToken, async (req, res) => {
   }
 });
 
-// 명언 삭제
+// 명언 삭제 (작성자 또는 관리자)
 router.delete('/:id', authenticateToken, async (req, res) => {
   try {
     const { id } = req.params;
     const userId = req.user.id;
     
-    // 명언 존재 확인 및 권한 확인
+    // 명언 존재 확인
     const quote = await Quote.findById(id);
     if (!quote) {
       return res.status(404).json({ message: '명언을 찾을 수 없습니다.' });
     }
     
-    if (quote.author_id !== userId) {
+    // 관리자 권한 확인
+    const User = require('../models/user');
+    const isAdmin = await User.isAdmin(userId);
+    
+    // 작성자 또는 관리자만 삭제 가능
+    if (quote.author_id !== userId && !isAdmin) {
       return res.status(403).json({ message: '삭제 권한이 없습니다.' });
     }
     
-    // 오늘 작성한 글인지 확인
-    const today = new Date().toISOString().split('T')[0];
-    const quoteDate = new Date(quote.created_at).toISOString().split('T')[0];
-    
-    if (quoteDate !== today) {
-      return res.status(400).json({ message: '오늘 작성한 글만 삭제할 수 있습니다.' });
+    // 관리자가 아닌 경우 오늘 작성한 글인지 확인
+    if (!isAdmin) {
+      const today = new Date().toISOString().split('T')[0];
+      const quoteDate = new Date(quote.created_at).toISOString().split('T')[0];
+      
+      if (quoteDate !== today) {
+        return res.status(400).json({ message: '오늘 작성한 글만 삭제할 수 있습니다.' });
+      }
     }
     
     // 좋아요 먼저 삭제
