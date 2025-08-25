@@ -198,6 +198,18 @@ class User {
     return result.rows[0] || null;
   }
 
+  static async updateVerificationToken(userId, verificationToken) {
+    const result = await pool.query(
+      `UPDATE users 
+       SET verification_token = $1, verification_token_expires = NOW() + INTERVAL '24 hours'
+       WHERE id = $2 
+       RETURNING id, username, email`,
+      [verificationToken, userId]
+    );
+    
+    return result.rows[0] || null;
+  }
+
   static async isAdmin(userId) {
     const result = await pool.query(
       'SELECT is_admin FROM users WHERE id = $1',

@@ -29,23 +29,33 @@ router.post('/register', async (req, res) => {
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
+    // 이메일 인증 토큰 생성
+    const verificationToken = jwt.sign(
+      { userId: 'temp' }, // 임시로 생성, 나중에 업데이트
+      process.env.JWT_SECRET,
+      { expiresIn: '24h' }
+    );
+
     // 사용자 생성
     const user = await User.create({
       username,
       email,
       password: hashedPassword,
-      verificationToken: null
+      verificationToken: verificationToken
     });
 
-    // 이메일 인증 토큰 생성
-    const verificationToken = jwt.sign(
+    // 실제 사용자 ID로 토큰 업데이트
+    const actualVerificationToken = jwt.sign(
       { userId: user.id },
       process.env.JWT_SECRET,
       { expiresIn: '24h' }
     );
 
+    // 토큰을 데이터베이스에 업데이트
+    await User.updateVerificationToken(user.id, actualVerificationToken);
+
     // 인증 이메일 발송
-    await sendVerificationEmail(email, user.username, verificationToken);
+    await sendVerificationEmail(email, user.username, actualVerificationToken);
 
     res.status(201).json({
       message: '회원가입이 완료되었습니다. 이메일을 확인하여 인증을 완료해주세요.',
@@ -85,10 +95,10 @@ router.post('/login', async (req, res) => {
       return res.status(401).json({ message: '이메일 또는 비밀번호가 올바르지 않습니다.' });
     }
 
-    // 이메일 인증 확인 (완전히 비활성화)
-    // if (!user.email_verified) {
-    //   return res.status(401).json({ message: '이메일 인증을 완료해주세요.' });
-    // }
+    // 이메일 인증 확인
+    if (!user.email_verified) {
+      return res.status(401).json({ message: '이메일 인증을 완료해주세요.' });
+    }
 
     // JWT 토큰 생성
     const token = jwt.sign(
@@ -119,15 +129,14 @@ router.get('/verify-email/:token', async (req, res) => {
   try {
     const { token } = req.params;
 
-    // 토큰 검증
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await User.findById(decoded.userId);
+    // 토큰으로 사용자 찾기
+    const user = await User.findByVerificationToken(token);
 
     if (!user) {
       return res.status(400).json({ message: '유효하지 않은 인증 링크입니다.' });
     }
 
-    if (user.emailVerified) {
+    if (user.email_verified) {
       return res.status(400).json({ message: '이미 인증이 완료된 계정입니다.' });
     }
 
