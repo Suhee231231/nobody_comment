@@ -265,12 +265,13 @@ class User {
       await client.query('DELETE FROM likes WHERE user_id = $1', [userId]);
       
       // 사용자 정보를 재가입 가능하도록 수정 (이메일과 사용자명을 고유하지 않게 만듦)
-      const timestamp = Date.now();
+      const shortId = userId.replace(/-/g, '').substring(0, 8);
+      const timestamp = Date.now().toString().slice(-8);
       await client.query(
         `UPDATE users 
          SET email = $1, username = $2, deleted_at = NOW()
          WHERE id = $3`,
-        [`deleted_${timestamp}_${userId}`, `deleted_${timestamp}_${userId}`, userId]
+        [`del_${timestamp}_${shortId}`, `del_${timestamp}_${shortId}`, userId]
       );
       
       await client.query('COMMIT');
