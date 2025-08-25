@@ -16,13 +16,15 @@ const LoginPage: React.FC = () => {
     setIsLoading(true);
 
     try {
+      console.log('로그인 시도:', { email, password: password ? '***' : 'undefined' });
       const response = await authService.login({ email, password });
+      console.log('로그인 응답:', response);
       if (response.token) {
-        localStorage.setItem('token', response.token);
-        localStorage.setItem('user', JSON.stringify(response.user));
+        console.log('토큰 저장됨, 홈으로 이동');
         navigate('/');
       }
     } catch (err: any) {
+      console.error('로그인 에러:', err);
       setError(err.response?.data?.message || '로그인에 실패했습니다.');
     } finally {
       setIsLoading(false);
