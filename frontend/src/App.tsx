@@ -60,7 +60,6 @@ function App() {
     <Router>
       <div className="App">
         <Header 
-          isAuthenticated={isAuthenticated} 
           user={user} 
           onLogout={handleLogout} 
         />
@@ -79,7 +78,7 @@ function App() {
             element={
               isAuthenticated ? 
               <Navigate to="/" replace /> : 
-              <RegisterPage />
+              <RegisterPage onLogin={handleLogin} />
             } 
           />
           <Route path="/verify-email/:token" element={<VerifyEmailPage />} />
