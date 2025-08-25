@@ -277,6 +277,39 @@ router.post('/reset-password', async (req, res) => {
   }
 });
 
+// 사용자 정보 조회 (관리자용)
+router.get('/user/:email', async (req, res) => {
+  try {
+    const { email } = req.params;
+    
+    // 모든 사용자 중에서 해당 이메일 찾기 (삭제된 계정 포함)
+    const result = await pool.query(
+      'SELECT id, username, email, email_verified, is_admin, deleted_at, created_at FROM users WHERE email = $1',
+      [email]
+    );
+    
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: '사용자를 찾을 수 없습니다.' });
+    }
+    
+    const user = result.rows[0];
+    res.json({
+      user: {
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        emailVerified: user.email_verified,
+        isAdmin: user.is_admin,
+        deletedAt: user.deleted_at,
+        createdAt: user.created_at
+      }
+    });
+  } catch (error) {
+    console.error('Get user by email error:', error);
+    res.status(500).json({ message: '서버 오류가 발생했습니다.' });
+  }
+});
+
 // 임시 관리자 계정 생성 (개발용)
 router.post('/create-admin', async (req, res) => {
   try {
