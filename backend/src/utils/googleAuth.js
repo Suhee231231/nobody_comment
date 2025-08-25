@@ -84,13 +84,14 @@ const exchangeCodeForToken = async (code) => {
       throw new Error('Google OAuth configuration is incomplete');
     }
 
-    // 리다이렉트 URI 설정
+    // 리다이렉트 URI 설정 (getGoogleAuthUrl과 동일하게)
     const redirectUri = process.env.GOOGLE_REDIRECT_URI || 'https://nobody-comment.vercel.app/login';
     console.log('Using redirect URI:', redirectUri);
     console.log('Environment variables check:', {
       GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID ? 'SET' : 'NOT SET',
       GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET ? 'SET' : 'NOT SET',
-      GOOGLE_REDIRECT_URI: process.env.GOOGLE_REDIRECT_URI || 'NOT SET (using default)'
+      GOOGLE_REDIRECT_URI: process.env.GOOGLE_REDIRECT_URI || 'NOT SET (using default)',
+      CLIENT_ID_PREFIX: process.env.GOOGLE_CLIENT_ID?.substring(0, 20) + '...'
     });
 
     // Google OAuth 토큰 엔드포인트로 직접 요청
