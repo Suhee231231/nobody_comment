@@ -6,9 +6,10 @@ import './ProfilePage.css';
 interface ProfilePageProps {
   user: User | null;
   onLogout: () => void;
+  onUserUpdate: (updatedUser: User) => void;
 }
 
-const ProfilePage: React.FC<ProfilePageProps> = ({ user, onLogout }) => {
+const ProfilePage: React.FC<ProfilePageProps> = ({ user, onLogout, onUserUpdate }) => {
   const navigate = useNavigate();
   const [currentUser, setCurrentUser] = useState<User | null>(user);
   const [isEditingUsername, setIsEditingUsername] = useState(false);
@@ -45,6 +46,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ user, onLogout }) => {
     try {
       const updatedUser = await authService.updateUsername(newUsername);
       setCurrentUser(updatedUser);
+      onUserUpdate(updatedUser); // 부모 컴포넌트의 사용자 상태 업데이트
       setMessage({ type: 'success', text: '사용자명이 변경되었습니다.' });
       setIsEditingUsername(false);
     } catch (error: any) {

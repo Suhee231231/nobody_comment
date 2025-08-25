@@ -55,6 +55,10 @@ function App() {
     localStorage.removeItem('user');
   };
 
+  const handleUserUpdate = (updatedUser: User) => {
+    setUser(updatedUser);
+  };
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -99,7 +103,7 @@ function App() {
             path="/profile" 
             element={
               isAuthenticated ? 
-              <ProfilePage user={user} onLogout={handleLogout} /> : 
+              <ProfilePage user={user} onLogout={handleLogout} onUserUpdate={handleUserUpdate} /> : 
               <Navigate to="/login" replace />
             } 
           />
