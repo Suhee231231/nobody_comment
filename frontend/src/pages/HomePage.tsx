@@ -179,7 +179,7 @@ const HomePage: React.FC<HomePageProps> = ({ user }) => {
                 onUnlike={handleUnlike}
                 onUpdate={handleUpdate}
                 onDelete={handleDelete}
-                isMyQuote={myQuote?.id === quote.id}
+                isMyQuote={myQuote?.id === quote.id || user?.isAdmin}
               />
             ))}
           </div>

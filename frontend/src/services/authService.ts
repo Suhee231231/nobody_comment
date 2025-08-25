@@ -5,6 +5,7 @@ export interface User {
   username: string;
   email: string;
   emailVerified?: boolean;
+  isAdmin?: boolean;
   createdAt: string;
 }
 
