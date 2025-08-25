@@ -38,10 +38,10 @@ router.post('/google/callback', async (req, res) => {
     
     // 코드를 액세스 토큰으로 교환
     const tokens = await exchangeCodeForToken(code);
-    console.log('Token exchange successful:', { hasIdToken: !!tokens.id_token });
+    console.log('Token exchange successful:', { hasAccessToken: !!tokens.access_token });
     
-    // ID 토큰에서 사용자 정보 추출
-    const userInfo = await verifyGoogleToken(tokens.id_token);
+    // 액세스 토큰으로 사용자 정보 가져오기
+    const userInfo = await getUserInfoFromGoogle(tokens.access_token);
     console.log('User info extracted:', { 
       googleId: userInfo.googleId, 
       email: userInfo.email, 
@@ -102,15 +102,15 @@ router.post('/google/callback', async (req, res) => {
     console.error('Error stack:', error.stack);
     
     // 더 구체적인 에러 메시지
-    if (error.message === 'Google OAuth configuration is incomplete') {
+    if (error.message.includes('redirect_uri_mismatch')) {
+      return res.status(500).json({ message: 'Google OAuth 리다이렉트 URI 설정 오류입니다.' });
+    }
+    
+    if (error.message.includes('Google OAuth configuration is incomplete')) {
       return res.status(500).json({ message: 'Google OAuth 설정이 완료되지 않았습니다.' });
     }
     
-    if (error.message === 'Google OAuth client secret is not configured properly') {
-      return res.status(500).json({ message: 'Google OAuth 클라이언트 시크릿이 올바르게 설정되지 않았습니다.' });
-    }
-    
-    if (error.message === 'Invalid Google token') {
+    if (error.message.includes('Invalid Google token')) {
       return res.status(401).json({ message: '유효하지 않은 Google 토큰입니다.' });
     }
     

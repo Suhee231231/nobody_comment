@@ -1,16 +1,12 @@
 const { OAuth2Client } = require('google-auth-library');
 
-// Google OAuth 클라이언트 초기화 (client_secret 포함)
-const client = new OAuth2Client(
-  process.env.GOOGLE_CLIENT_ID,
-  process.env.GOOGLE_CLIENT_SECRET,
-  process.env.GOOGLE_REDIRECT_URI || 'https://nobody-comment.vercel.app/login'
-);
+// Google ID 토큰 검증용 클라이언트 (리다이렉트 URI 없음)
+const verifyClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 // Google ID 토큰 검증
 const verifyGoogleToken = async (idToken) => {
   try {
-    const ticket = await client.verifyIdToken({
+    const ticket = await verifyClient.verifyIdToken({
       idToken,
       audience: process.env.GOOGLE_CLIENT_ID
     });
@@ -78,56 +74,48 @@ const getGoogleAuthUrl = () => {
   return url;
 };
 
-// Google OAuth 코드를 액세스 토큰으로 교환
+// Google OAuth 코드를 액세스 토큰으로 교환 (새로운 방식)
 const exchangeCodeForToken = async (code) => {
   try {
-    // 환경 변수 확인 및 디버깅
-    console.log('Google OAuth environment variables check:', {
-      hasClientId: !!process.env.GOOGLE_CLIENT_ID,
-      hasClientSecret: !!process.env.GOOGLE_CLIENT_SECRET,
-      hasRedirectUri: !!process.env.GOOGLE_REDIRECT_URI,
-      clientIdLength: process.env.GOOGLE_CLIENT_ID?.length,
-      clientSecretLength: process.env.GOOGLE_CLIENT_SECRET?.length
-    });
-
+    console.log('Starting token exchange with code:', { codeLength: code?.length });
+    
+    // 환경 변수 확인
     if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
-      console.error('Missing Google OAuth environment variables:', {
-        hasClientId: !!process.env.GOOGLE_CLIENT_ID,
-        hasClientSecret: !!process.env.GOOGLE_CLIENT_SECRET
-      });
       throw new Error('Google OAuth configuration is incomplete');
     }
 
-    // 명시적으로 리다이렉트 URI 지정
+    // 리다이렉트 URI 설정
     const redirectUri = process.env.GOOGLE_REDIRECT_URI || 'https://nobody-comment.vercel.app/login';
-    console.log('Using redirect URI for token exchange:', redirectUri);
+    console.log('Using redirect URI:', redirectUri);
 
-    // OAuth2Client의 getToken 메서드 사용 (리다이렉트 URI 명시)
-    const { tokens } = await client.getToken({
-      code,
-      redirect_uri: redirectUri
+    // Google OAuth 토큰 엔드포인트로 직접 요청
+    const tokenResponse = await fetch('https://oauth2.googleapis.com/token', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: new URLSearchParams({
+        code: code,
+        client_id: process.env.GOOGLE_CLIENT_ID,
+        client_secret: process.env.GOOGLE_CLIENT_SECRET,
+        redirect_uri: redirectUri,
+        grant_type: 'authorization_code',
+      }),
     });
+
+    if (!tokenResponse.ok) {
+      const errorData = await tokenResponse.json();
+      console.error('Token exchange failed:', errorData);
+      throw new Error(`Token exchange failed: ${errorData.error} - ${errorData.error_description}`);
+    }
+
+    const tokens = await tokenResponse.json();
+    console.log('Token exchange successful:', { hasAccessToken: !!tokens.access_token });
     
     return tokens;
   } catch (error) {
     console.error('Token exchange failed:', error);
-    console.error('Error details:', {
-      message: error.message,
-      code: error.code,
-      status: error.status,
-      response: error.response?.data
-    });
-    
-    if (error.response?.data?.error === 'invalid_request' && 
-        error.response?.data?.error_description === 'client_secret is missing.') {
-      throw new Error('Google OAuth client secret is not configured properly');
-    }
-    
-    if (error.response?.data?.error === 'invalid_grant') {
-      throw new Error('Google OAuth code has expired or already been used');
-    }
-    
-    throw new Error('Failed to exchange code for token');
+    throw error;
   }
 };
 
