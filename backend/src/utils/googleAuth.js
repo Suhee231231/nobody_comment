@@ -53,7 +53,7 @@ const getUserInfoFromGoogle = async (accessToken) => {
 // Google OAuth URL 생성
 const getGoogleAuthUrl = () => {
   const clientId = process.env.GOOGLE_CLIENT_ID;
-  const redirectUri = process.env.GOOGLE_REDIRECT_URI || 'https://nobody-comment.vercel.app/login';
+  const redirectUri = process.env.GOOGLE_REDIRECT_URI || 'https://nobody-comment.vercel.app';
   const scope = 'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile openid';
   
   const url = `https://accounts.google.com/o/oauth2/v2/auth?` +
@@ -85,7 +85,7 @@ const exchangeCodeForToken = async (code) => {
     }
 
     // 리다이렉트 URI 설정
-    const redirectUri = process.env.GOOGLE_REDIRECT_URI || 'https://nobody-comment.vercel.app/login';
+    const redirectUri = process.env.GOOGLE_REDIRECT_URI || 'https://nobody-comment.vercel.app';
     console.log('Using redirect URI:', redirectUri);
     console.log('Environment variables check:', {
       GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID ? 'SET' : 'NOT SET',
