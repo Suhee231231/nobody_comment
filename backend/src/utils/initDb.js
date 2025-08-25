@@ -15,11 +15,13 @@ async function runMigration() {
       ALTER TABLE users ADD COLUMN IF NOT EXISTS reset_password_token VARCHAR(255);
       ALTER TABLE users ADD COLUMN IF NOT EXISTS reset_password_expires TIMESTAMP WITH TIME ZONE;
       ALTER TABLE users ADD COLUMN IF NOT EXISTS google_id VARCHAR(255) UNIQUE;
+      ALTER TABLE users ADD COLUMN IF NOT EXISTS is_admin BOOLEAN DEFAULT FALSE;
 
       -- 인덱스 생성 (IF NOT EXISTS로 안전하게)
       CREATE INDEX IF NOT EXISTS idx_users_google_id ON users(google_id);
       CREATE INDEX IF NOT EXISTS idx_users_verification_token ON users(verification_token);
       CREATE INDEX IF NOT EXISTS idx_users_reset_password_token ON users(reset_password_token);
+      CREATE INDEX IF NOT EXISTS idx_users_is_admin ON users(is_admin);
     `;
     
     await pool.query(migrationSQL);

@@ -66,20 +66,26 @@ router.post('/register', async (req, res) => {
 router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
+    
+    console.log('로그인 시도:', { email, password: password ? '***' : 'undefined' });
 
     // 사용자 찾기
     const user = await User.findByEmail(email);
+    console.log('사용자 찾기 결과:', user ? { id: user.id, email: user.email, hasPassword: !!user.password_hash } : '사용자 없음');
+    
     if (!user) {
       return res.status(401).json({ message: '이메일 또는 비밀번호가 올바르지 않습니다.' });
     }
 
     // 비밀번호 확인
     const isValidPassword = await bcrypt.compare(password, user.password_hash);
+    console.log('비밀번호 확인 결과:', isValidPassword);
+    
     if (!isValidPassword) {
       return res.status(401).json({ message: '이메일 또는 비밀번호가 올바르지 않습니다.' });
     }
 
-    // 이메일 인증 확인 (임시로 비활성화)
+    // 이메일 인증 확인 (완전히 비활성화)
     // if (!user.email_verified) {
     //   return res.status(401).json({ message: '이메일 인증을 완료해주세요.' });
     // }
