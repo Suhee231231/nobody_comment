@@ -39,7 +39,7 @@ class User {
   
   static async findByEmail(email) {
     const result = await pool.query(
-      'SELECT * FROM users WHERE email = $1',
+      'SELECT * FROM users WHERE email = $1 AND deleted_at IS NULL',
       [email]
     );
     
@@ -75,7 +75,7 @@ class User {
   
   static async findById(id) {
     const result = await pool.query(
-      'SELECT id, username, email, email_verified, created_at FROM users WHERE id = $1',
+      'SELECT id, username, email, email_verified, created_at FROM users WHERE id = $1 AND deleted_at IS NULL',
       [id]
     );
     
@@ -84,7 +84,7 @@ class User {
   
   static async findByUsername(username) {
     const result = await pool.query(
-      'SELECT id, username, email, email_verified, created_at FROM users WHERE username = $1',
+      'SELECT id, username, email, email_verified, created_at FROM users WHERE username = $1 AND deleted_at IS NULL',
       [username]
     );
     
@@ -252,8 +252,14 @@ class User {
       // 사용자의 좋아요 삭제
       await client.query('DELETE FROM likes WHERE user_id = $1', [userId]);
       
-      // 사용자 삭제
-      await client.query('DELETE FROM users WHERE id = $1', [userId]);
+      // 사용자 정보를 재가입 가능하도록 수정 (이메일과 사용자명을 고유하지 않게 만듦)
+      const timestamp = Date.now();
+      await client.query(
+        `UPDATE users 
+         SET email = $1, username = $2, deleted_at = NOW()
+         WHERE id = $3`,
+        [`deleted_${timestamp}_${userId}`, `deleted_${timestamp}_${userId}`, userId]
+      );
       
       await client.query('COMMIT');
     } catch (error) {

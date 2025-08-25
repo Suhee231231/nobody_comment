@@ -46,6 +46,12 @@ async function runMigration() {
           ALTER TABLE users ADD COLUMN IF NOT EXISTS terms_agreed_at TIMESTAMP WITH TIME ZONE;
           ALTER TABLE users ADD COLUMN IF NOT EXISTS privacy_agreed_at TIMESTAMP WITH TIME ZONE;
         `
+      },
+      {
+        name: 'add_deleted_at_column',
+        sql: `
+          ALTER TABLE users ADD COLUMN IF NOT EXISTS deleted_at TIMESTAMP WITH TIME ZONE;
+        `
       }
     ];
     
