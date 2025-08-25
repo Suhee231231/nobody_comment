@@ -310,6 +310,33 @@ router.get('/user/:email', async (req, res) => {
   }
 });
 
+// 사용자 계정 삭제 (관리자용)
+router.delete('/user/:email', async (req, res) => {
+  try {
+    const { email } = req.params;
+    
+    // 사용자 찾기
+    const result = await pool.query(
+      'SELECT id FROM users WHERE email = $1',
+      [email]
+    );
+    
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: '사용자를 찾을 수 없습니다.' });
+    }
+    
+    const userId = result.rows[0].id;
+    
+    // 사용자 계정 삭제 (User.deleteAccount 메서드 사용)
+    await User.deleteAccount(userId);
+    
+    res.json({ message: '사용자 계정이 삭제되었습니다.' });
+  } catch (error) {
+    console.error('Delete user error:', error);
+    res.status(500).json({ message: '서버 오류가 발생했습니다.' });
+  }
+});
+
 // 임시 관리자 계정 생성 (개발용)
 router.post('/create-admin', async (req, res) => {
   try {
