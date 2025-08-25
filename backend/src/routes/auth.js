@@ -97,7 +97,8 @@ router.post('/login', async (req, res) => {
         id: user.id,
         email: user.email,
         username: user.username,
-        emailVerified: user.email_verified
+        emailVerified: user.email_verified,
+        isAdmin: user.is_admin
       }
     });
   } catch (error) {

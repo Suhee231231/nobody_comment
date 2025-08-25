@@ -197,6 +197,35 @@ class User {
     
     return result.rows[0] || null;
   }
+
+  static async isAdmin(userId) {
+    const result = await pool.query(
+      'SELECT is_admin FROM users WHERE id = $1',
+      [userId]
+    );
+    
+    return result.rows[0]?.is_admin || false;
+  }
+
+  static async getAllUsers() {
+    const result = await pool.query(
+      'SELECT id, username, email, email_verified, is_admin, created_at FROM users ORDER BY created_at DESC'
+    );
+    
+    return result.rows;
+  }
+
+  static async setAdminStatus(userId, isAdmin) {
+    const result = await pool.query(
+      `UPDATE users 
+       SET is_admin = $1 
+       WHERE id = $2 
+       RETURNING id, username, email, is_admin`,
+      [isAdmin, userId]
+    );
+    
+    return result.rows[0] || null;
+  }
 }
 
 module.exports = User;

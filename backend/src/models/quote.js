@@ -133,6 +133,31 @@ class Quote {
     
     return result.rows;
   }
+
+  static async findAllWithAuthor() {
+    const result = await pool.query(
+      `SELECT q.*, u.username as author_username, u.email as author_email
+       FROM quotes q 
+       JOIN users u ON q.author_id = u.id 
+       ORDER BY q.created_at DESC`
+    );
+    
+    return result.rows;
+  }
+
+  static async deleteById(id) {
+    const result = await pool.query(
+      'DELETE FROM quotes WHERE id = $1 RETURNING *',
+      [id]
+    );
+    
+    return result.rows[0] || null;
+  }
+
+  static async deleteAll() {
+    const result = await pool.query('DELETE FROM quotes RETURNING id');
+    return result.rows.length;
+  }
 }
 
 module.exports = Quote;

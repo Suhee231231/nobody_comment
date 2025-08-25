@@ -7,6 +7,7 @@ require('dotenv').config();
 
 const authRoutes = require('./routes/auth');
 const quoteRoutes = require('./routes/quotes');
+const adminRoutes = require('./routes/admin');
 const { initializeDatabase, runMigration } = require('./utils/initDb');
 // const scheduler = require('./utils/scheduler');
 
@@ -35,6 +36,7 @@ app.get('/health', (req, res) => {
 // API 라우트
 app.use('/auth', authRoutes);
 app.use('/quotes', quoteRoutes);
+app.use('/admin', adminRoutes);
 
 // API 전용 서버 - 프론트엔드는 Vercel에서 서빙
 app.get('*', (req, res) => {
