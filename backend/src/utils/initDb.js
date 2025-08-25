@@ -6,26 +6,56 @@ async function runMigration() {
   try {
     console.log('🔄 데이터베이스 마이그레이션 실행 중...');
     
-    // 마이그레이션 SQL 실행
-    const migrationSQL = `
-      -- 기존 users 테이블에 새 컬럼 추가 (IF NOT EXISTS로 안전하게)
-      ALTER TABLE users ADD COLUMN IF NOT EXISTS email_verified BOOLEAN DEFAULT FALSE;
-      ALTER TABLE users ADD COLUMN IF NOT EXISTS verification_token VARCHAR(255);
-      ALTER TABLE users ADD COLUMN IF NOT EXISTS verification_token_expires TIMESTAMP WITH TIME ZONE;
-      ALTER TABLE users ADD COLUMN IF NOT EXISTS reset_password_token VARCHAR(255);
-      ALTER TABLE users ADD COLUMN IF NOT EXISTS reset_password_expires TIMESTAMP WITH TIME ZONE;
-      ALTER TABLE users ADD COLUMN IF NOT EXISTS google_id VARCHAR(255) UNIQUE;
-      ALTER TABLE users ADD COLUMN IF NOT EXISTS is_admin BOOLEAN DEFAULT FALSE;
-
-      -- 인덱스 생성 (IF NOT EXISTS로 안전하게)
-      CREATE INDEX IF NOT EXISTS idx_users_google_id ON users(google_id);
-      CREATE INDEX IF NOT EXISTS idx_users_verification_token ON users(verification_token);
-      CREATE INDEX IF NOT EXISTS idx_users_reset_password_token ON users(reset_password_token);
-      CREATE INDEX IF NOT EXISTS idx_users_is_admin ON users(is_admin);
-    `;
+    // 마이그레이션 히스토리 테이블 생성
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS migrations (
+        id SERIAL PRIMARY KEY,
+        name VARCHAR(255) UNIQUE NOT NULL,
+        executed_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+      );
+    `);
     
-    await pool.query(migrationSQL);
-    console.log('✅ 데이터베이스 마이그레이션이 성공적으로 완료되었습니다.');
+    // 마이그레이션 목록
+    const migrations = [
+      {
+        name: 'add_email_verification_columns',
+        sql: `
+          ALTER TABLE users ADD COLUMN IF NOT EXISTS email_verified BOOLEAN DEFAULT FALSE;
+          ALTER TABLE users ADD COLUMN IF NOT EXISTS verification_token VARCHAR(255);
+          ALTER TABLE users ADD COLUMN IF NOT EXISTS verification_token_expires TIMESTAMP WITH TIME ZONE;
+          ALTER TABLE users ADD COLUMN IF NOT EXISTS reset_password_token VARCHAR(255);
+          ALTER TABLE users ADD COLUMN IF NOT EXISTS reset_password_expires TIMESTAMP WITH TIME ZONE;
+          ALTER TABLE users ADD COLUMN IF NOT EXISTS google_id VARCHAR(255) UNIQUE;
+          CREATE INDEX IF NOT EXISTS idx_users_google_id ON users(google_id);
+          CREATE INDEX IF NOT EXISTS idx_users_verification_token ON users(verification_token);
+          CREATE INDEX IF NOT EXISTS idx_users_reset_password_token ON users(reset_password_token);
+        `
+      },
+      {
+        name: 'add_admin_columns',
+        sql: `
+          ALTER TABLE users ADD COLUMN IF NOT EXISTS is_admin BOOLEAN DEFAULT FALSE;
+          CREATE INDEX IF NOT EXISTS idx_users_is_admin ON users(is_admin);
+        `
+      }
+    ];
+    
+    // 각 마이그레이션 실행
+    for (const migration of migrations) {
+      // 이미 실행되었는지 확인
+      const result = await pool.query('SELECT id FROM migrations WHERE name = $1', [migration.name]);
+      
+      if (result.rows.length === 0) {
+        console.log(`🔄 마이그레이션 실행: ${migration.name}`);
+        await pool.query(migration.sql);
+        await pool.query('INSERT INTO migrations (name) VALUES ($1)', [migration.name]);
+        console.log(`✅ 마이그레이션 완료: ${migration.name}`);
+      } else {
+        console.log(`⏭️ 마이그레이션 건너뛰기: ${migration.name} (이미 실행됨)`);
+      }
+    }
+    
+    console.log('✅ 모든 데이터베이스 마이그레이션이 완료되었습니다.');
     
   } catch (error) {
     console.error('❌ 데이터베이스 마이그레이션 실패:', error);
