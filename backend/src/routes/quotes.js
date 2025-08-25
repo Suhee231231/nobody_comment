@@ -5,6 +5,8 @@ const { authenticateToken, optionalAuth } = require('../middleware/auth');
 
 const router = express.Router();
 
+console.log('📋 quotes 라우터 초기화됨');
+
 // 모든 명언 조회 (페이지네이션)
 router.get('/', optionalAuth, async (req, res) => {
   try {
@@ -89,11 +91,17 @@ router.post('/', authenticateToken, async (req, res) => {
 
 // 내 명언 조회
 router.get('/my', authenticateToken, async (req, res) => {
+  console.log('🔍 /quotes/my 라우트 호출됨');
   try {
     const authorId = req.user.id;
     const today = new Date().toISOString().split('T')[0];
     
+    console.log('📅 오늘 날짜:', today);
+    console.log('👤 사용자 ID:', authorId);
+    
     const quote = await Quote.findByAuthorId(authorId, today);
+    
+    console.log('📝 찾은 명언:', quote ? '있음' : '없음');
     
     if (!quote) {
       return res.status(404).json({ message: '오늘 작성한 명언이 없습니다.' });
