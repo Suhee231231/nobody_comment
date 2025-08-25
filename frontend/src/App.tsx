@@ -26,8 +26,30 @@ function App() {
         setUser(currentUser);
       }
       
-      // URL에서 토큰 파라미터 확인 (Google OAuth 콜백 처리)
+      // URL에서 Google OAuth 코드 파라미터 확인
       const urlParams = new URLSearchParams(window.location.search);
+      const code = urlParams.get('code');
+      
+      if (code) {
+        try {
+          // Google OAuth 코드로 백엔드에 요청
+          const result = await authService.googleCallback(code);
+          setUser(result.user);
+          
+          // URL에서 파라미터 제거
+          window.history.replaceState({}, document.title, window.location.pathname);
+        } catch (error: any) {
+          console.error('Google OAuth callback failed:', error);
+          
+          // 새 사용자인 경우 로그인 페이지로 리다이렉트 (약관 동의 처리)
+          if (error.response?.status === 404 && error.response?.data?.isNewUser) {
+            window.location.href = `/login?code=${code}`;
+            return;
+          }
+        }
+      }
+      
+      // 기존 토큰 파라미터 처리 (하위 호환성)
       const token = urlParams.get('token');
       const userParam = urlParams.get('user');
       

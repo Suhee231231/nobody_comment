@@ -25,8 +25,14 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
   const [searchParams] = useSearchParams();
 
   useEffect(() => {
-    // Google OAuth 콜백 처리는 App.tsx에서 URL 파라미터로 처리
-    // 여기서는 코드 처리 로직 제거
+    // URL에서 Google OAuth 코드 확인
+    const urlParams = new URLSearchParams(window.location.search);
+    const code = urlParams.get('code');
+    
+    if (code && !isProcessingGoogleAuth) {
+      setIsProcessingGoogleAuth(true);
+      handleGoogleCallback(code);
+    }
   }, [searchParams]);
 
   const handleGoogleCallback = async (code: string) => {
@@ -48,6 +54,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
       
       // 새 사용자인 경우 약관 동의 모달 표시
       if (error.response?.status === 404 && error.response?.data?.isNewUser) {
+        setGoogleAuthCode(code); // 코드 저장
         setShowTerms('signup'); // Google 회원가입 약관 동의 모달 표시
       } else {
         setError(error.response?.data?.message || '구글 로그인에 실패했습니다.');
@@ -91,6 +98,11 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
       return;
     }
 
+    if (!googleAuthCode) {
+      setError('Google 인증 코드가 없습니다. 다시 시도해주세요.');
+      return;
+    }
+
     try {
       setLoading(true);
       setError('');
@@ -104,6 +116,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
       onLogin();
       navigate('/');
       setShowTerms(null);
+      setGoogleAuthCode(''); // 코드 초기화
     } catch (error: any) {
       console.error('Google signup failed:', error);
       setError(error.response?.data?.message || '회원가입에 실패했습니다.');
