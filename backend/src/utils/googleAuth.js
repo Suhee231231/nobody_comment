@@ -87,6 +87,11 @@ const exchangeCodeForToken = async (code) => {
     // 리다이렉트 URI 설정
     const redirectUri = process.env.GOOGLE_REDIRECT_URI || 'https://nobody-comment.vercel.app/login';
     console.log('Using redirect URI:', redirectUri);
+    console.log('Environment variables check:', {
+      GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID ? 'SET' : 'NOT SET',
+      GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET ? 'SET' : 'NOT SET',
+      GOOGLE_REDIRECT_URI: process.env.GOOGLE_REDIRECT_URI || 'NOT SET (using default)'
+    });
 
     // Google OAuth 토큰 엔드포인트로 직접 요청
     const tokenResponse = await fetch('https://oauth2.googleapis.com/token', {
@@ -106,6 +111,13 @@ const exchangeCodeForToken = async (code) => {
     if (!tokenResponse.ok) {
       const errorData = await tokenResponse.json();
       console.error('Token exchange failed:', errorData);
+      console.error('Request details:', {
+        code: code.substring(0, 10) + '...',
+        client_id: process.env.GOOGLE_CLIENT_ID?.substring(0, 20) + '...',
+        redirect_uri: redirectUri,
+        status: tokenResponse.status,
+        statusText: tokenResponse.statusText
+      });
       throw new Error(`Token exchange failed: ${errorData.error} - ${errorData.error_description}`);
     }
 
