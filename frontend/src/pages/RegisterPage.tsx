@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import authService, { RegisterData } from '../services/authService';
+import './RegisterPage.css';
 
 interface RegisterPageProps {
   onLogin: () => void;
