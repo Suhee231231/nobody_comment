@@ -61,11 +61,12 @@
       "label": "아무개의 명언 메인 화면"
     },
     {
-      "src": "screenshot-2.svg", 
+      "src": "screenshot-2.svg",
       "sizes": "750x1334",
       "type": "image/svg+xml",
       "form_factor": "narrow",
       "label": "아무개의 명언 모바일 화면"
     }
-  ]
+  ],
+  "iarc_rating_id": "nobody-comment-app"
 }
