@@ -1,0 +1,56 @@
+<svg width="750" height="1334" viewBox="0 0 750 1334" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="750" height="1334" fill="#f8fafc"/>
+  
+  <!-- 헤더 -->
+  <rect x="0" y="0" width="750" height="120" fill="#0ea5e9"/>
+  <text x="375" y="70" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="20" font-weight="bold">아무개의 명언</text>
+  
+  <!-- 메인 콘텐츠 -->
+  <rect x="20" y="140" width="710" height="1000" fill="white" stroke="#e2e8f0" stroke-width="1" rx="8"/>
+  
+  <!-- 명언 카드들 -->
+  <rect x="40" y="180" width="670" height="150" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1" rx="8"/>
+  <text x="60" y="210" fill="#334155" font-family="Arial, sans-serif" font-size="16" font-weight="bold">오늘의 명언</text>
+  <text x="60" y="240" fill="#64748b" font-family="Arial, sans-serif" font-size="14">"커피 한 잔의 여유가 가장 큰 행복이다"</text>
+  <text x="60" y="270" fill="#94a3b8" font-family="Arial, sans-serif" font-size="12">- 아무개</text>
+  <text x="60" y="300" fill="#0ea5e9" font-family="Arial, sans-serif" font-size="12">👍 42</text>
+  
+  <rect x="40" y="350" width="670" height="150" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1" rx="8"/>
+  <text x="60" y="380" fill="#334155" font-family="Arial, sans-serif" font-size="16" font-weight="bold">오늘의 명언</text>
+  <text x="60" y="410" fill="#64748b" font-family="Arial, sans-serif" font-size="14">"내일은 오늘보다 더 나을 것이다"</text>
+  <text x="60" y="440" fill="#94a3b8" font-family="Arial, sans-serif" font-size="12">- 아무개</text>
+  <text x="60" y="470" fill="#0ea5e9" font-family="Arial, sans-serif" font-size="12">👍 38</text>
+  
+  <rect x="40" y="520" width="670" height="150" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1" rx="8"/>
+  <text x="60" y="550" fill="#334155" font-family="Arial, sans-serif" font-size="16" font-weight="bold">오늘의 명언</text>
+  <text x="60" y="580" fill="#64748b" font-family="Arial, sans-serif" font-size="14">"작은 진전도 진전이다"</text>
+  <text x="60" y="610" fill="#94a3b8" font-family="Arial, sans-serif" font-size="12">- 아무개</text>
+  <text x="60" y="640" fill="#0ea5e9" font-family="Arial, sans-serif" font-size="12">👍 25</text>
+  
+  <rect x="40" y="690" width="670" height="150" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1" rx="8"/>
+  <text x="60" y="720" fill="#334155" font-family="Arial, sans-serif" font-size="16" font-weight="bold">오늘의 명언</text>
+  <text x="60" y="750" fill="#64748b" font-family="Arial, sans-serif" font-size="14">"오늘 하루도 잘 살았다"</text>
+  <text x="60" y="780" fill="#94a3b8" font-family="Arial, sans-serif" font-size="12">- 아무개</text>
+  <text x="60" y="810" fill="#0ea5e9" font-family="Arial, sans-serif" font-size="12">👍 19</text>
+  
+  <!-- 하단 버튼 -->
+  <rect x="275" y="880" width="200" height="60" fill="#0ea5e9" rx="30"/>
+  <text x="375" y="920" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="16" font-weight="bold">명언 작성하기</text>
+  
+  <!-- 앱 설명 -->
+  <text x="375" y="1000" text-anchor="middle" fill="#64748b" font-family="Arial, sans-serif" font-size="14">일상적인 사람들의 말을 마치 위인의 명언처럼 격상시키는 소셜 플랫폼</text>
+  
+  <!-- 하단 네비게이션 -->
+  <rect x="0" y="1200" width="750" height="134" fill="white" stroke="#e2e8f0" stroke-width="1"/>
+  <circle cx="187" cy="1267" r="20" fill="#0ea5e9"/>
+  <text x="187" y="1275" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="16">🏠</text>
+  <text x="187" y="1300" text-anchor="middle" fill="#64748b" font-family="Arial, sans-serif" font-size="12">홈</text>
+  
+  <circle cx="375" cy="1267" r="20" fill="#e2e8f0"/>
+  <text x="375" y="1275" text-anchor="middle" fill="#64748b" font-family="Arial, sans-serif" font-size="16">✍️</text>
+  <text x="375" y="1300" text-anchor="middle" fill="#64748b" font-family="Arial, sans-serif" font-size="12">작성</text>
+  
+  <circle cx="563" cy="1267" r="20" fill="#e2e8f0"/>
+  <text x="563" y="1275" text-anchor="middle" fill="#64748b" font-family="Arial, sans-serif" font-size="16">👤</text>
+  <text x="563" y="1300" text-anchor="middle" fill="#64748b" font-family="Arial, sans-serif" font-size="12">프로필</text>
+</svg>

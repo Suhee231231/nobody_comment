@@ -39,17 +39,33 @@
   "theme_color": "#0ea5e9",
   "background_color": "#ffffff",
   "orientation": "portrait",
-  "categories": ["social", "lifestyle", "entertainment"],
+  "categories": [
+    "social",
+    "lifestyle",
+    "entertainment"
+  ],
   "lang": "ko",
   "dir": "ltr",
   "scope": "/",
-  "start_url": "/",
-  "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#0ea5e9",
   "prefer_related_applications": false,
-  "related_applications": [],
-  "categories": ["social", "lifestyle", "entertainment"],
-  "lang": "ko",
-  "dir": "ltr"
+  "id": "nobody-comment",
+  "launch_handler": {
+    "client_mode": "navigate-existing"
+  },
+  "screenshots": [
+    {
+      "src": "screenshot-1.svg",
+      "sizes": "1280x720",
+      "type": "image/svg+xml",
+      "form_factor": "wide",
+      "label": "아무개의 명언 메인 화면"
+    },
+    {
+      "src": "screenshot-2.svg", 
+      "sizes": "750x1334",
+      "type": "image/svg+xml",
+      "form_factor": "narrow",
+      "label": "아무개의 명언 모바일 화면"
+    }
+  ]
 }
