@@ -1,0 +1,54 @@
+{
+  "manifest": "twa-manifest.json",
+  "packageId": "com.nobodycomment.app",
+  "host": "nobody-comment.vercel.app",
+  "name": "아무개의 명언",
+  "launcherName": "아무개명언",
+  "display": "standalone",
+  "themeColor": "#0ea5e9",
+  "navigationColor": "#0ea5e9",
+  "backgroundColor": "#ffffff",
+  "enableNotifications": true,
+  "shortcuts": [
+    {
+      "name": "오늘의 명언 작성",
+      "shortName": "명언 작성",
+      "url": "/write",
+      "chosenIconUrl": "icon-192x192.png"
+    },
+    {
+      "name": "명언 보기",
+      "shortName": "명언 보기",
+      "url": "/",
+      "chosenIconUrl": "icon-192x192.png"
+    }
+  ],
+  "generatorApp": "bubblewrap",
+  "webManifestUrl": "https://nobody-comment.vercel.app/manifest.json",
+  "fallbackType": "customtabs",
+  "features": {
+    "playBilling": {
+      "enabled": false
+    }
+  },
+  "alphaDependencies": {
+    "enabled": false
+  },
+  "enableSiteSettingsShortcut": true,
+  "isChromeOSOnly": false,
+  "enableTwaSplash": true,
+  "useBrowserOnChromeOS": false,
+  "enableWebViewShortcut": false,
+  "enableCopyFiles": true,
+  "monochromeIconUrl": "icon-192x192.png",
+  "maskableIconUrl": "icon-512x512.png",
+  "splashScreenFadeOutDuration": 300,
+  "enableSplashScreen": true,
+  "splashScreenUrl": "https://nobody-comment.vercel.app/splash.png",
+  "splashScreenBackgroundColor": "#ffffff",
+  "enableSplashScreenHapticFeedback": true,
+  "splashScreenImageUrl": "https://nobody-comment.vercel.app/splash.png",
+  "splashScreenDarkUrl": "https://nobody-comment.vercel.app/splash-dark.png",
+  "splashScreenDarkBackgroundColor": "#000000",
+  "splashScreenDarkImageUrl": "https://nobody-comment.vercel.app/splash-dark.png"
+}

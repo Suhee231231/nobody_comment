@@ -46,5 +46,10 @@
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#0ea5e9"
+  "theme_color": "#0ea5e9",
+  "prefer_related_applications": false,
+  "related_applications": [],
+  "categories": ["social", "lifestyle", "entertainment"],
+  "lang": "ko",
+  "dir": "ltr"
 }

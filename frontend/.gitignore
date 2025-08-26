@@ -21,3 +21,12 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# TWA 관련 파일들
+/android
+*.keystore
+*.aab
+*.apk
+*.apks
+/twa
+bubblewrap.log

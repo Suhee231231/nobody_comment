@@ -30,7 +30,14 @@
     "build:dev": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "clean": "rm -rf build && rm -rf node_modules/.cache"
+    "clean": "rm -rf build && rm -rf node_modules/.cache",
+    "twa:init": "bubblewrap init --manifest https://nobody-comment.vercel.app/manifest.json",
+    "twa:doctor": "bubblewrap doctor",
+    "twa:build": "bubblewrap build",
+    "twa:build:apk": "bubblewrap build --apk",
+    "twa:build:aab": "bubblewrap build --aab",
+    "twa:update": "bubblewrap update",
+    "twa:setup": "node scripts/twa-setup.js"
   },
   "eslintConfig": {
     "extends": [
