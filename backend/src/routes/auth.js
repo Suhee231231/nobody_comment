@@ -225,8 +225,15 @@ router.post('/forgot-password', async (req, res) => {
       { expiresIn: '1h' }
     );
 
+    // 토큰을 데이터베이스에 저장
+    await User.setResetPasswordToken(email, resetToken);
+
     // 비밀번호 재설정 이메일 발송
-    await sendPasswordResetEmail(email, user.username, resetToken);
+    const emailSent = await sendPasswordResetEmail(email, user.username, resetToken);
+    
+    if (!emailSent) {
+      return res.status(500).json({ message: '이메일 발송에 실패했습니다. 다시 시도해주세요.' });
+    }
 
     res.json({ message: '비밀번호 재설정 이메일을 발송했습니다.' });
   } catch (error) {
@@ -248,22 +255,15 @@ router.post('/reset-password', async (req, res) => {
       return res.status(400).json({ message: '비밀번호는 6자 이상이어야 합니다.' });
     }
 
-    // 토큰 검증
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    
-    if (decoded.type !== 'password_reset') {
-      return res.status(400).json({ message: '유효하지 않은 토큰입니다.' });
-    }
-
-    // 사용자 찾기
-    const user = await User.findById(decoded.userId);
+    // 토큰으로 사용자 찾기 및 검증
+    const user = await User.findByResetToken(token);
     
     if (!user) {
-      return res.status(400).json({ message: '유효하지 않은 토큰입니다.' });
+      return res.status(400).json({ message: '유효하지 않거나 만료된 토큰입니다.' });
     }
 
     // 비밀번호 업데이트
-    await User.updatePassword(user.id, newPassword);
+    await User.resetPassword(token, newPassword);
 
     res.json({ message: '비밀번호가 성공적으로 변경되었습니다.' });
   } catch (error) {
