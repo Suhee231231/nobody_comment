@@ -41,5 +41,10 @@
   "orientation": "portrait",
   "categories": ["social", "lifestyle", "entertainment"],
   "lang": "ko",
-  "dir": "ltr"
+  "dir": "ltr",
+  "scope": "/",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0ea5e9"
 }

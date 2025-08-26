@@ -109,6 +109,28 @@ const RegisterPage: React.FC<RegisterPageProps> = ({ onLogin }) => {
           1. 이용자는 하루에 100자 이내의 글을 하나씩 작성할 수 있습니다.
           2. 이용자는 다른 이용자의 글에 추천할 수 있습니다.
           3. 모든 글은 매일 자정에 자동으로 리셋됩니다.
+
+          제4조 (이용자의 의무)
+          이용자는 다음 행위를 해서는 안 됩니다:
+          - 타인의 권리나 명예, 신용 등을 침해하는 행위
+          - 음란, 폭력적, 차별적, 혐오적 내용의 콘텐츠 게시
+          - 서비스의 정상적인 운영을 방해하는 행위
+          - 타인의 개인정보를 수집, 저장, 공개하는 행위
+          - 상업적 목적의 광고, 홍보, 판매 행위
+
+          제5조 (지적재산권)
+          1. 서비스와 관련된 모든 지적재산권은 서비스 제공자에게 귀속됩니다.
+          2. 이용자가 서비스 내에서 작성한 콘텐츠의 저작권은 해당 이용자에게 귀속됩니다.
+
+          제6조 (면책조항)
+          서비스 제공자는 천재지변, 전쟁, 기타 불가항력으로 인한 서비스 중단에 대해 책임을 지지 않습니다.
+
+                     제7조 (준거법 및 관할법원)
+           본 약관은 대한민국 법률에 따라 규율되고 해석됩니다.
+
+           시행일: 2025년 8월 26일
+
+           ※ 전체 약관은 /terms-of-service.html에서 확인하실 수 있습니다.
         `
       },
       privacy: {
@@ -121,11 +143,35 @@ const RegisterPage: React.FC<RegisterPageProps> = ({ onLogin }) => {
           3. 서비스 개선 및 신규 서비스 개발
 
           제2조 (수집하는 개인정보 항목)
-          1. 필수항목: 사용자명, 이메일 주소
-          2. 선택항목: 프로필 정보
+          1. 필수항목: 사용자명, 이메일 주소, 비밀번호
+          2. 자동수집항목: IP 주소, 쿠키, 접속 로그, 기기 정보
+          3. 선택항목: 프로필 정보, 마케팅 정보 수신 동의
 
           제3조 (개인정보의 보유 및 이용기간)
-          회원 탈퇴 시까지 (단, 관련 법령에 따라 보존이 필요한 경우 해당 기간까지)
+          - 회원정보: 회원탈퇴 시까지
+          - 서비스 이용기록: 3개월
+          - 계약 또는 청약철회 등에 관한 기록: 5년
+          - 대금결제 및 재화 등의 공급에 관한 기록: 5년
+          - 소비자의 불만 또는 분쟁처리에 관한 기록: 3년
+
+          제4조 (개인정보의 제3자 제공)
+          현재로서는 개인정보를 제3자에게 제공하지 않습니다.
+
+                     제5조 (개인정보처리의 위탁)
+           - Railway: 서버 호스팅 및 데이터베이스 관리
+           - Vercel: 웹 서비스 호스팅
+
+          제6조 (정보주체의 권리)
+          개인정보 열람, 정정·삭제, 처리정지를 요구할 수 있습니다.
+
+                     제7조 (개인정보의 안전성 확보조치)
+           - 개인정보의 암호화
+           - 해킹 등에 대비한 기술적 대책
+           - 개인정보에 대한 접근 제한
+
+           시행일: 2025년 8월 26일
+
+           ※ 전체 개인정보처리방침은 /privacy-policy.html에서 확인하실 수 있습니다.
         `
       }
     };
@@ -146,7 +192,15 @@ const RegisterPage: React.FC<RegisterPageProps> = ({ onLogin }) => {
             <div className="text-sm text-gray-700 whitespace-pre-line">
               {termsContent[showTerms].content}
             </div>
-            <div className="mt-6 flex justify-end">
+            <div className="mt-6 flex justify-between items-center">
+              <a
+                href={showTerms === 'service' ? '/terms-of-service.html' : '/privacy-policy.html'}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-primary-600 hover:text-primary-500 text-sm underline"
+              >
+                전체 {showTerms === 'service' ? '이용약관' : '개인정보처리방침'} 보기
+              </a>
               <button
                 onClick={() => setShowTerms(null)}
                 className="btn-primary px-4 py-2"

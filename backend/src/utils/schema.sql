@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS users (
   verification_token_expires TIMESTAMP WITH TIME ZONE,
   reset_password_token VARCHAR(255),
   reset_password_expires TIMESTAMP WITH TIME ZONE,
-  google_id VARCHAR(255) UNIQUE,
+
   terms_agreed BOOLEAN DEFAULT FALSE,
   privacy_agreed BOOLEAN DEFAULT FALSE,
   terms_agreed_at TIMESTAMP WITH TIME ZONE,
@@ -43,7 +43,7 @@ CREATE INDEX IF NOT EXISTS idx_likes_user_id ON likes(user_id);
 CREATE INDEX IF NOT EXISTS idx_likes_quote_id ON likes(quote_id);
 CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
 CREATE INDEX IF NOT EXISTS idx_users_username ON users(username);
-CREATE INDEX IF NOT EXISTS idx_users_google_id ON users(google_id);
+
 CREATE INDEX IF NOT EXISTS idx_users_verification_token ON users(verification_token);
 CREATE INDEX IF NOT EXISTS idx_users_reset_password_token ON users(reset_password_token);
 
