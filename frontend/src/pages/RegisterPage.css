@@ -77,7 +77,7 @@
 }
 
 .register-button {
-  background-color: #0ea5e9;
+  background-color: #669BB1;
   color: white;
   padding: 12px;
   border: none;
@@ -89,7 +89,7 @@
 }
 
 .register-button:hover:not(:disabled) {
-  background-color: #0284c7;
+  background-color: #5a8ba0;
 }
 
 .register-button:disabled {
@@ -104,12 +104,12 @@
 }
 
 .register-links a {
-  color: #0ea5e9;
+  color: #669BB1;
   text-decoration: none;
   transition: color 0.3s;
 }
 
 .register-links a:hover {
-  color: #0284c7;
+  color: #5a8ba0;
   text-decoration: underline;
 }
