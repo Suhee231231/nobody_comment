@@ -3,7 +3,8 @@ const pool = require('../utils/database');
 
 class User {
   static async create({ username, email, password, verificationToken = null }) {
-    const hashedPassword = await bcrypt.hash(password, 12);
+    // password가 이미 해시화된 경우를 처리
+    const hashedPassword = password.startsWith('$2a$') ? password : await bcrypt.hash(password, 12);
     
     const result = await pool.query(
       `INSERT INTO users (username, email, password_hash, verification_token, verification_token_expires) 

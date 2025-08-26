@@ -25,10 +25,6 @@ router.post('/register', async (req, res) => {
       return res.status(400).json({ message: '이미 사용 중인 사용자명입니다.' });
     }
 
-    // 비밀번호 해시화
-    const saltRounds = 10;
-    const hashedPassword = await bcrypt.hash(password, saltRounds);
-
     // 이메일 인증 토큰 생성
     const verificationToken = jwt.sign(
       { userId: 'temp' }, // 임시로 생성, 나중에 업데이트
@@ -36,11 +32,11 @@ router.post('/register', async (req, res) => {
       { expiresIn: '24h' }
     );
 
-    // 사용자 생성
+    // 사용자 생성 (User.create 메서드가 내부에서 비밀번호 해시화)
     const user = await User.create({
       username,
       email,
-      password: hashedPassword,
+      password: password,
       verificationToken: verificationToken
     });
 
