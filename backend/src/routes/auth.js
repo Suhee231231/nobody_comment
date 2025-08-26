@@ -450,14 +450,19 @@ router.put('/password', authenticateToken, async (req, res) => {
       return res.status(400).json({ message: '현재 비밀번호가 올바르지 않습니다.' });
     }
 
-    // 새 비밀번호 해시화 및 업데이트
-    const hashedNewPassword = await bcrypt.hash(newPassword, 12);
-    await User.updatePassword(userId, hashedNewPassword);
+    // 새 비밀번호 업데이트 (User.updatePassword 메서드가 내부에서 해시화함)
+    await User.updatePassword(userId, newPassword);
 
     res.json({ message: '비밀번호가 변경되었습니다.' });
   } catch (error) {
     console.error('Change password error:', error);
-    res.status(500).json({ message: '서버 오류가 발생했습니다.' });
+    console.error('Error message:', error.message);
+    console.error('Error stack:', error.stack);
+    res.status(500).json({ 
+      message: '서버 오류가 발생했습니다.',
+      error: error.message,
+      stack: error.stack
+    });
   }
 });
 
