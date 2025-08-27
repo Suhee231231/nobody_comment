@@ -78,8 +78,8 @@ const QuoteCard: React.FC<QuoteCardProps> = ({
       >
         {/* 명언 내용과 작성자 - 카드 안에 배치 */}
         <div className="absolute inset-0">
-          {/* 명언 텍스트와 작성자 - 상단 25% 위치에 고정 */}
-          <div className="absolute top-[25%] left-1/2 transform -translate-x-1/2 w-full px-8">
+          {/* 명언 텍스트와 작성자 - 세로 가운데 정렬 */}
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full px-8">
                          {isEditing ? (
                <div className="flex flex-col items-center space-y-2">
                  <textarea
