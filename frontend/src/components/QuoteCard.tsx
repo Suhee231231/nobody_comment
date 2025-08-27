@@ -86,7 +86,7 @@ const QuoteCard: React.FC<QuoteCardProps> = ({
                    value={editContent}
                    onChange={(e) => setEditContent(e.target.value)}
                    className="w-full text-sm sm:text-base text-gray-800 text-center font-medium font-serif bg-transparent border-none resize-none focus:outline-none"
-                   maxLength={100}
+                                       maxLength={70}
                    rows={3}
                  />
                </div>

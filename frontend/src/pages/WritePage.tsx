@@ -106,7 +106,7 @@ const WritePage: React.FC = () => {
               onChange={(e) => setContent(e.target.value)}
               placeholder="단상을 자유롭게 남겨주세요. 누군가에겐 인상적인 한마디가 될 것입니다."
               className="input-field h-32 resize-none"
-              maxLength={100}
+                              maxLength={70}
             />
             <div className="mt-2 space-y-2">
               <p className="text-sm text-gray-500">
