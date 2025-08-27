@@ -15,13 +15,11 @@ root.render(
 );
 
 // 서비스 워커 등록
-if (registerServiceWorker()) {
-  registerServiceWorker()!.then(() => {
-    console.log('Service Worker registered successfully');
-  }).catch((error) => {
-    console.error('Service Worker registration failed:', error);
-  });
-}
+registerServiceWorker()?.then(() => {
+  console.log('Service Worker registered successfully');
+}).catch((error) => {
+  console.error('Service Worker registration failed:', error);
+});
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
