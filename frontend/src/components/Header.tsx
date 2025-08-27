@@ -26,7 +26,7 @@ const Header: React.FC<HeaderProps> = ({ user, onLogout }) => {
               alt="아무개의 명언" 
               className="w-8 h-8 rounded-lg"
             />
-            <h1 className="text-3xl text-gray-900" style={{ fontFamily: "'Jua', sans-serif" }}>아무개의 명언</h1>
+            <h1 className="text-2xl text-gray-900" style={{ fontFamily: "'Jua', sans-serif" }}>아무개의 명언</h1>
           </Link>
 
           <nav className="flex items-center space-x-4">
