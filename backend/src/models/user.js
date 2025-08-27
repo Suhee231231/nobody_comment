@@ -267,6 +267,18 @@ class User {
       client.release();
     }
   }
+
+  static async deleteByEmail(email) {
+    // 먼저 사용자 찾기
+    const user = await this.findByEmail(email);
+    if (!user) {
+      return null;
+    }
+    
+    // deleteAccount 메서드 사용
+    await this.deleteAccount(user.id);
+    return user;
+  }
 }
 
 module.exports = User;

@@ -82,4 +82,28 @@ router.patch('/users/:id/admin', async (req, res) => {
   }
 });
 
+// 특정 사용자 삭제
+router.delete('/users/:email', async (req, res) => {
+  try {
+    const { email } = req.params;
+    
+    // 이메일로 사용자 찾기
+    const user = await User.findByEmail(email);
+    if (!user) {
+      return res.status(404).json({ message: '사용자를 찾을 수 없습니다.' });
+    }
+    
+    // 사용자 삭제
+    const deletedUser = await User.deleteByEmail(email);
+    
+    res.json({ 
+      message: '사용자가 삭제되었습니다.',
+      user: deletedUser 
+    });
+  } catch (error) {
+    console.error('Delete user error:', error);
+    res.status(500).json({ message: '서버 오류가 발생했습니다.' });
+  }
+});
+
 module.exports = router;
