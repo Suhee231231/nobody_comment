@@ -33,7 +33,7 @@ jobs:
         
     - name: Initialize TWA project
       run: |
-        echo -e "nobody-comment.vercel.app\n/\n아무개의 명언 - 가장 보통의 존재들이 쓰는 하루 한마디\n아무개명언\napp.vercel.nobody_comment.twa\n1\nstandalone\nportrait\n#0EA5E9\n#FFFFFF\nhttps://nobody-comment.vercel.app/icon-512x512.png\n\n\nNo\nNo\nandroid.keystore\nandroid" | bubblewrap init --manifest https://nobody-comment.vercel.app/manifest.json
+        echo -e "nobody-comment.vercel.app\n/\n아무개의 명언 - 가장 보통의 존재들이 쓰는 하루 한마디\n아무개명언\napp.vercel.nobody_comment.twa\n1\nstandalone\nportrait\n#0EA5E9\n#FFFFFF\nhttps://nobody-comment.vercel.app/icon-512x512.png\n\n\nNo\nNo\nandroid.keystore\nandroid\n$JAVA_HOME" | bubblewrap init --manifest https://nobody-comment.vercel.app/manifest.json
         
     - name: Build AAB
       run: |
