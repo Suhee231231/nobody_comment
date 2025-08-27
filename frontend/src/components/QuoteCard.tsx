@@ -70,7 +70,7 @@ const QuoteCard: React.FC<QuoteCardProps> = ({
   };
 
   return (
-    <div className="relative w-full max-w-md mx-auto mb-4">
+    <div className="relative w-full max-w-md mx-auto mb-2">
       {/* 빈티지 종이 카드 배경 */}
       <div 
         className="relative w-full aspect-[3/2] bg-contain bg-center bg-no-repeat"
@@ -78,8 +78,8 @@ const QuoteCard: React.FC<QuoteCardProps> = ({
       >
         {/* 명언 내용과 작성자 - 카드 안에 배치 */}
         <div className="absolute inset-0">
-          {/* 명언 텍스트와 작성자 - 상단 35% 위치에 고정 */}
-          <div className="absolute top-[35%] left-1/2 transform -translate-x-1/2 w-full px-8">
+          {/* 명언 텍스트와 작성자 - 상단 25% 위치에 고정 */}
+          <div className="absolute top-[25%] left-1/2 transform -translate-x-1/2 w-full px-8">
                          {isEditing ? (
                <div className="flex flex-col items-center space-y-2">
                  <textarea
@@ -109,7 +109,7 @@ const QuoteCard: React.FC<QuoteCardProps> = ({
       </div>
       
              {/* 버튼들 - 카드 밖 하단 */}
-       <div className="flex justify-between items-center -mt-1">
+       <div className="flex justify-between items-center -mt-3">
                    {/* 수정 모드일 때 저장/취소 버튼 */}
           {isEditing ? (
             <div className="flex space-x-3">
