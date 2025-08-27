@@ -71,6 +71,8 @@ android {
         resValue "string", "launchUrl", launchUrl
 
         
+            resValue "string", "launchHandlerClientMode", 'navigate-existing'
+        
 
         
             // The URL the Web Manifest for the Progressive Web App that the TWA points to. This
@@ -152,7 +154,7 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
         }
     }
     compileOptions {

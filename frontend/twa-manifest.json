@@ -40,6 +40,6 @@
   "retainedBundles": [],
   "protocolHandlers": [],
   "fileHandlers": [],
-  "launchHandlerClientMode": "",
+  "launchHandlerClientMode": "navigate-existing",
   "appVersion": "1"
 }
