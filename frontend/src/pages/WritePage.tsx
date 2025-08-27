@@ -42,8 +42,8 @@ const WritePage: React.FC = () => {
       return;
     }
 
-    if (content.length > 100) {
-      alert('100자 이내로 작성해주세요.');
+    if (content.length > 70) {
+      alert('70자 이내로 작성해주세요.');
       return;
     }
 
@@ -59,7 +59,7 @@ const WritePage: React.FC = () => {
     }
   };
 
-  const remainingChars = 100 - content.length;
+  const remainingChars = 70 - content.length;
 
   if (!canPost) {
     return (
