@@ -38,6 +38,7 @@ jobs:
     - name: Build AAB
       run: |
         echo -e "nobody123\nnobody123" | bubblewrap build
+      timeout-minutes: 30
         
     - name: Upload AAB artifact
       uses: actions/upload-artifact@v4
