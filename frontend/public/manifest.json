@@ -52,20 +52,39 @@
   "launch_handler": {
     "client_mode": "navigate-existing"
   },
+  "splash": {
+    "src": "splash.png",
+    "sizes": "1080x1920",
+    "type": "image/png"
+  },
   "screenshots": [
     {
-      "src": "screenshot-1.svg",
+      "src": "screenshot-1.png",
       "sizes": "1280x720",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "form_factor": "wide",
       "label": "아무개의 명언 메인 화면"
     },
     {
-      "src": "screenshot-2.svg",
+      "src": "screenshot-2.png",
       "sizes": "750x1334",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "form_factor": "narrow",
-      "label": "아무개의 명언 모바일 화면"
+      "label": "아무개의 명언 작성 화면"
+    },
+    {
+      "src": "screenshot-3.png",
+      "sizes": "750x1334",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "아무개의 명언 작성 중 화면"
+    },
+    {
+      "src": "screenshot-4.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "아무개의 명언 작성 후 메인 화면"
     }
   ],
   "iarc_rating_id": "nobody-comment-app"
