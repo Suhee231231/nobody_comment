@@ -92,7 +92,7 @@ const QuoteCard: React.FC<QuoteCardProps> = ({
                </div>
              ) : (
               <div className="flex flex-col items-center space-y-2">
-                <p className="text-base sm:text-lg text-gray-800 leading-relaxed text-center font-medium font-serif">
+                <p className="text-[15px] sm:text-base text-gray-800 leading-relaxed text-center font-medium font-serif">
                   "{quote.content}"
                 </p>
                 
