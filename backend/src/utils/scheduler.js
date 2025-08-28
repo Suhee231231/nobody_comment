@@ -7,16 +7,25 @@ class Scheduler {
     this.isRunning = false;
   }
 
-  // 매일 자정에 실행되는 작업
+  // 매일 자정에 실행되는 작업 (한국 시간 기준)
   scheduleDailyReset() {
     const now = new Date();
-    const tomorrow = new Date(now);
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    tomorrow.setHours(0, 0, 0, 0);
     
-    const timeUntilMidnight = tomorrow.getTime() - now.getTime();
+    // 한국 시간으로 변환 (UTC+9)
+    const koreaTime = new Date(now.getTime() + (9 * 60 * 60 * 1000));
     
-    console.log(`⏰ 다음 자정 리셋까지 ${Math.floor(timeUntilMidnight / 1000 / 60)}분 남았습니다.`);
+    // 다음 날 한국 시간 자정 계산
+    const tomorrowKorea = new Date(koreaTime);
+    tomorrowKorea.setDate(tomorrowKorea.getDate() + 1);
+    tomorrowKorea.setHours(0, 0, 0, 0);
+    
+    // UTC 기준으로 변환
+    const tomorrowUTC = new Date(tomorrowKorea.getTime() - (9 * 60 * 60 * 1000));
+    
+    const timeUntilMidnight = tomorrowUTC.getTime() - now.getTime();
+    
+    console.log(`⏰ 다음 한국 시간 자정 리셋까지 ${Math.floor(timeUntilMidnight / 1000 / 60)}분 남았습니다.`);
+    console.log(`🇰🇷 한국 시간 기준: ${koreaTime.toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' })}`);
     
     setTimeout(() => {
       this.performDailyReset();
