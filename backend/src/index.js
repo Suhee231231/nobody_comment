@@ -83,7 +83,7 @@ app.listen(PORT, async () => {
   console.log('🌐 프론트엔드는 Vercel에서 서빙됩니다.');
   
   // 자정 리셋 스케줄러 시작
-  // scheduler.scheduleDailyReset();
+  scheduler.scheduleDailyReset();
 });
 
 // Graceful shutdown
