@@ -10,6 +10,7 @@ import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import ResetPasswordPage from './pages/ResetPasswordPage';
 import WritePage from './pages/WritePage';
 import ProfilePage from './pages/ProfilePage';
+import AccountDeletionPage from './pages/AccountDeletionPage';
 import './App.css';
 
 function App() {
@@ -104,6 +105,14 @@ function App() {
             element={
               isAuthenticated ? 
               <ProfilePage user={user} onLogout={handleLogout} onUserUpdate={handleUserUpdate} /> : 
+              <Navigate to="/login" replace />
+            } 
+          />
+          <Route 
+            path="/account-deletion" 
+            element={
+              isAuthenticated ? 
+              <AccountDeletionPage /> : 
               <Navigate to="/login" replace />
             } 
           />
