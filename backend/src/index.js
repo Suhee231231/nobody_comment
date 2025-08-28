@@ -9,7 +9,7 @@ const authRoutes = require('./routes/auth');
 const quoteRoutes = require('./routes/quotes');
 const adminRoutes = require('./routes/admin');
 const { initializeDatabase, runMigration } = require('./utils/initDb');
-// const scheduler = require('./utils/scheduler');
+const scheduler = require('./utils/scheduler');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
