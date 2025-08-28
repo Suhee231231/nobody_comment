@@ -36,7 +36,6 @@ const AccountDeletionPage: React.FC = () => {
         {/* 앱 및 개발자 정보 */}
         <div className="mb-8 text-center">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">아무개의 명언</h1>
-          <p className="text-gray-600">개발자: 아무개</p>
         </div>
 
         <h2 className="text-2xl font-bold text-red-600 mb-6">계정 및 데이터 삭제</h2>
@@ -140,10 +139,7 @@ const AccountDeletionPage: React.FC = () => {
           <h3 className="text-lg font-semibold text-gray-900 mb-4">문의 및 연락처</h3>
           <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
             <p className="text-gray-700 mb-2">
-              <strong>개발자:</strong> 아무개
-            </p>
-            <p className="text-gray-700 mb-2">
-              <strong>이메일:</strong> privacy@nobody-comment.com
+              <strong>이메일:</strong> anonymous9uote@gmail.com
             </p>
             <p className="text-gray-700">
               <strong>웹사이트:</strong> https://nobody-comment.vercel.app

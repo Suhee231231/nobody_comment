@@ -260,6 +260,15 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ user, onLogout, onUserUpdate 
             회원탈퇴 시 모든 데이터가 영구적으로 삭제되며 복구할 수 없습니다.
           </p>
           
+          <div className="mb-4">
+            <a 
+              href="/account-deletion" 
+              className="inline-block px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 mb-4"
+            >
+              상세한 계정 삭제 정보 보기
+            </a>
+          </div>
+          
           {isDeletingAccount ? (
             <div className="space-y-4">
               <div>
